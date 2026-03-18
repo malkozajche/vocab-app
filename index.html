@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FR–DE Vocab ⚡</title>
+<script>
+  (function(){
+    try {
+      var s = JSON.parse(localStorage.getItem('frapp_settings') || '{}');
+      if (s.darkMode) document.documentElement.setAttribute('data-theme','dark');
+    } catch(e) {}
+  })();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<style>
+/* ============================================================
+   DESIGN SYSTEM  –  coral/teal/amber palette
+   ============================================================ */
+:root {
+  --primary:   #FF6B6B;   /* coral red */
+  --primary-d: #E85555;
+  --secondary: #4ECDC4;   /* teal */
+  --success:   #44CF6C;
+  --error:     #FF4757;
+  --warning:   #FFD166;
+  --info:      #70C1B3;
+  --accent:    #A855F7;   /* violet accent */
+
+  --bg:        #F7F3EF;
+  --bg2:       #FFFFFF;
+  --card:      #FFFFFF;
+  --border:    #EAE4DC;
+  --text:      #1C1917;
+  --text2:     #6B6560;
+  --shadow:    0 2px 16px rgba(255,107,107,.10);
+  --radius:    16px;
+  --radius-sm: 10px;
+
+  /* gradients */
+  --grad-hero: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+  --grad-card: linear-gradient(135deg, #4ECDC4 0%, #44CF6C 100%);
+  --grad-violet: linear-gradient(135deg, #A855F7 0%, #6366F1 100%);
+}
+[data-theme="dark"] {
+  --bg:    #12100E;
+  --bg2:   #1C1917;
+  --card:  #27231F;
+  --border:#3A342E;
+  --text:  #F5F0EB;
+  --text2: #9C948C;
+  --shadow:0 2px 16px rgba(0,0,0,.45);
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+/* VIEWS */
+.view { display: none; flex-direction: column; min-height: 100dvh; padding: 0 0 80px; }
+.view.active  { display: flex; animation: slide-in-right .28s ease; }
+.view.leaving { animation: slide-out-left .28s ease forwards; }
+@keyframes slide-in-right { from { opacity:0; transform:translateX(40px); } to { opacity:1; transform:translateX(0); } }
+@keyframes slide-out-left  { from { opacity:1; transform:translateX(0); }   to { opacity:0; transform:translateX(-40px); } }
+
+/* TOP BAR */
+.top-bar { position:sticky; top:0; z-index:50; display:flex; align-items:center; gap:8px; padding:12px 16px; background:var(--bg2); border-bottom:1px solid var(--border); }
+.top-bar h2 { flex:1; font-size:1.1rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+
+/* BOTTOM NAV */
+.bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:50; display:flex; background:var(--bg2); border-top:1px solid var(--border); }
+.nav-tab { flex:1; border:none; background:none; cursor:pointer; padding:10px 4px 12px; font-size:.65rem; color:var(--text2); display:flex; flex-direction:column; align-items:center; gap:3px; transition:color .15s; }
+.nav-tab .icon { font-size:1.3rem; }
+.nav-tab.active { color:var(--primary); }
+
+/* LAYOUT */
+.container { padding:16px; max-width:600px; margin:0 auto; width:100%; }
+.card { background:var(--card); border:1px solid var(--border); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow); }
+
+/* BUTTONS */
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; padding:12px 22px; border-radius:var(--radius-sm); border:none; cursor:pointer; font-size:.95rem; font-weight:600; transition:transform .1s, box-shadow .1s; }
+.btn:active { transform:scale(.97); }
+.btn-primary { background:var(--grad-hero); color:#fff; box-shadow:0 4px 16px rgba(255,107,107,.35); }
+.btn-primary:hover { filter:brightness(1.07); }
+.btn-success { background:var(--grad-card); color:#fff; }
+.btn-danger  { background:var(--error);     color:#fff; }
+.btn-ghost   { background:var(--border);    color:var(--text); }
+.btn-sm      { padding:7px 14px; font-size:.82rem; }
+.btn-full    { width:100%; }
+
+/* FORMS */
+input, select, textarea { width:100%; padding:10px 14px; background:var(--bg); color:var(--text); border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:.95rem; outline:none; transition:border-color .2s; }
+input:focus, select:focus, textarea:focus { border-color:var(--primary); }
+textarea { resize:vertical; min-height:100px; font-family:monospace; font-size:.85rem; }
+label { font-size:.82rem; font-weight:600; color:var(--text2); display:block; margin-bottom:4px; }
+.form-group { margin-bottom:12px; }
+
+/* BADGES */
+.badge { display:inline-block; padding:3px 10px; border-radius:99px; font-size:.75rem; font-weight:700; }
+.badge-primary { background:rgba(108,99,255,.15); color:var(--primary); }
+.badge-success { background:rgba(78,203,113,.15); color:var(--success); }
+.badge-warning { background:rgba(255,217,61,.2);  color:#b89000; }
+
+/* HOME */
+.streak-bar { display:flex; align-items:center; gap:10px; background:var(--grad-hero); color:#fff; border-radius:var(--radius); padding:14px 18px; margin-bottom:16px; }
+.streak-fire { font-size:2rem; }
+.streak-info { flex:1; }
+.streak-num  { font-size:1.8rem; font-weight:900; line-height:1; }
+.streak-label { font-size:.75rem; opacity:.85; }
+.xp-bar-wrap { margin-top:6px; }
+.xp-bar-track { height:8px; background:rgba(255,255,255,.25); border-radius:99px; overflow:hidden; }
+.xp-bar-fill  { height:100%; background:var(--warning); border-radius:99px; transition:width .5s ease; }
+.xp-label     { font-size:.7rem; opacity:.8; margin-top:3px; }
+.mode-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:16px; }
+.mode-card { background:var(--card); border:1.5px solid var(--border); border-radius:var(--radius); padding:18px 14px; cursor:pointer; text-align:center; transition:border-color .2s, transform .1s, box-shadow .2s; box-shadow:var(--shadow); }
+.mode-card:hover { border-color:var(--primary); transform:translateY(-2px); box-shadow:0 6px 20px rgba(108,99,255,.2); }
+.mode-card .mode-icon { font-size:2rem; margin-bottom:8px; }
+.mode-card .mode-name { font-weight:700; font-size:.9rem; }
+.mode-card .mode-desc { font-size:.75rem; color:var(--text2); margin-top:3px; }
+.level-badge { background:var(--warning); color:#1C1917; border-radius:99px; padding:3px 12px; font-weight:900; font-size:.85rem; }
+
+/* LISTS */
+.list-chip { display:inline-flex; align-items:center; gap:6px; background:var(--border); border-radius:99px; padding:5px 12px; font-size:.82rem; font-weight:600; cursor:pointer; transition:background .15s, color .15s; border:2px solid transparent; }
+.list-chip.active { background:rgba(108,99,255,.15); border-color:var(--primary); color:var(--primary); }
+.list-chip:hover { background:rgba(108,99,255,.1); }
+.list-chips-wrap { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.list-row { display:flex; align-items:center; gap:8px; padding:10px 0; border-bottom:1px solid var(--border); }
+.list-row:last-child { border-bottom:none; }
+.list-row .list-name { flex:1; font-weight:600; }
+.list-row .list-count { font-size:.8rem; color:var(--text2); }
+
+/* VOCAB MANAGER */
+.photo-drop { border:2px dashed var(--border); border-radius:var(--radius); padding:20px; text-align:center; cursor:pointer; transition:border-color .2s, background .2s; margin-bottom:16px; }
+.photo-drop:hover, .photo-drop.drag-over { border-color:var(--primary); background:rgba(108,99,255,.05); }
+.photo-drop img { max-height:200px; border-radius:var(--radius-sm); }
+.photo-drop p { color:var(--text2); font-size:.85rem; margin-top:8px; }
+.word-list { display:flex; flex-direction:column; gap:8px; }
+.word-item { background:var(--card); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; display:flex; align-items:center; gap:10px; }
+.word-item-text { flex:1; min-width:0; }
+.word-fr  { font-weight:700; }
+.word-tr  { font-size:.82rem; color:var(--text2); }
+.word-ex  { font-size:.75rem; color:var(--text2); font-style:italic; margin-top:2px; }
+.mastery-stars { color:var(--warning); font-size:.85rem; letter-spacing:-1px; }
+.word-actions { display:flex; gap:6px; }
+
+/* IMPORT */
+.import-preview { background:var(--bg); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 14px; font-size:.8rem; font-family:monospace; color:var(--text2); max-height:160px; overflow-y:auto; margin-top:8px; white-space:pre-wrap; }
+.import-count { font-size:.82rem; color:var(--success); font-weight:700; margin-top:6px; }
+
+/* FLASHCARD */
+.fc-scene { perspective:1000px; width:320px; height:200px; margin:24px auto 20px; cursor:pointer; }
+.fc-card  { width:100%; height:100%; position:relative; transform-style:preserve-3d; transition:transform .55s cubic-bezier(.4,0,.2,1); }
+.fc-card.flipped { transform:rotateY(180deg); }
+.fc-face  { position:absolute; inset:0; backface-visibility:hidden; border-radius:var(--radius); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; padding:20px; background:var(--card); border:1.5px solid var(--border); box-shadow:var(--shadow); text-align:center; }
+.fc-face.back { transform:rotateY(180deg); background:var(--primary); color:#fff; border-color:var(--primary); }
+.fc-word { font-size:1.6rem; font-weight:800; }
+.fc-sub  { font-size:.85rem; opacity:.75; }
+.fc-hint { font-size:.75rem; color:var(--text2); text-align:center; margin-bottom:4px; }
+.fc-btns { display:flex; gap:10px; justify-content:center; margin-top:8px; }
+
+/* QUIZ */
+.quiz-q { text-align:center; padding:24px 16px 16px; font-size:1.4rem; font-weight:800; }
+.quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px; }
+.quiz-opt { background:var(--card); border:2px solid var(--border); border-radius:var(--radius-sm); padding:14px 10px; cursor:pointer; font-size:.9rem; font-weight:600; text-align:center; transition:border-color .15s, background .15s; }
+.quiz-opt:hover   { border-color:var(--primary); background:rgba(108,99,255,.07); }
+.quiz-opt.correct { border-color:var(--success); background:rgba(78,203,113,.15); color:var(--success); }
+.quiz-opt.wrong   { border-color:var(--error);   background:rgba(255,107,107,.15); color:var(--error); }
+.quiz-opt.disabled { pointer-events:none; }
+
+/* TYPING */
+.typing-q { text-align:center; padding:24px 16px 8px; font-size:1.4rem; font-weight:800; }
+.typing-sub { text-align:center; color:var(--text2); font-size:.85rem; padding-bottom:12px; }
+.typing-input-wrap { padding:0 16px 12px; position:relative; }
+.typing-input-wrap input { padding-right:44px; }
+.typing-submit { position:absolute; right:22px; top:50%; transform:translateY(-50%); background:var(--primary); border:none; border-radius:var(--radius-sm); color:#fff; width:32px; height:32px; cursor:pointer; font-size:1rem; display:flex; align-items:center; justify-content:center; }
+.typing-feedback { text-align:center; padding:8px 16px; font-weight:700; font-size:1rem; min-height:30px; }
+.accent-bar { display:flex; flex-wrap:wrap; gap:6px; justify-content:center; padding:8px 16px; }
+.accent-btn { background:var(--border); border:none; border-radius:6px; padding:6px 10px; cursor:pointer; font-size:.95rem; color:var(--text); }
+.accent-btn:hover { background:var(--primary); color:#fff; }
+
+/* MATCH */
+.match-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; padding:0 16px; }
+.match-col  { display:flex; flex-direction:column; gap:8px; }
+.match-card { background:var(--card); border:2px solid var(--border); border-radius:var(--radius-sm); padding:14px 10px; cursor:pointer; font-size:.9rem; font-weight:600; text-align:center; transition:border-color .15s, background .15s, transform .1s; min-height:56px; display:flex; align-items:center; justify-content:center; }
+.match-card:hover    { border-color:var(--primary); transform:scale(1.02); }
+.match-card.selected { border-color:var(--primary); background:rgba(108,99,255,.12); }
+.match-card.matched  { border-color:var(--success); background:rgba(78,203,113,.12); opacity:.5; pointer-events:none; }
+.match-card.wrong    { border-color:var(--error);   background:rgba(255,107,107,.12); }
+.match-timer { text-align:center; font-size:.85rem; color:var(--text2); padding:8px; }
+
+/* PROGRESS BAR */
+.progress-header { display:flex; align-items:center; gap:10px; padding:12px 16px 8px; }
+.prog-bar-track  { flex:1; height:8px; background:var(--border); border-radius:99px; overflow:hidden; }
+.prog-bar-fill   { height:100%; background:var(--primary); border-radius:99px; transition:width .4s; }
+.prog-text       { font-size:.8rem; color:var(--text2); white-space:nowrap; }
+
+/* COMPLETE */
+.complete-card  { text-align:center; padding:32px 24px; }
+.complete-emoji { font-size:4rem; }
+.complete-title { font-size:1.6rem; font-weight:900; margin:12px 0 6px; }
+.complete-sub   { color:var(--text2); margin-bottom:24px; }
+.stats-row { display:flex; gap:16px; justify-content:center; margin-bottom:24px; }
+.stat-box  { background:var(--bg); border-radius:var(--radius-sm); padding:12px 18px; text-align:center; }
+.stat-num  { font-size:1.6rem; font-weight:900; color:var(--primary); }
+.stat-lbl  { font-size:.72rem; color:var(--text2); }
+
+/* SETTINGS */
+.settings-section { margin-bottom:20px; }
+.settings-section h3 { font-size:.8rem; font-weight:700; color:var(--text2); letter-spacing:.08em; text-transform:uppercase; padding:0 0 8px; }
+.settings-row { display:flex; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid var(--border); }
+.settings-row:last-child { border-bottom:none; }
+.settings-row .label { flex:1; font-size:.9rem; }
+.settings-row .sub   { font-size:.75rem; color:var(--text2); }
+.toggle { position:relative; width:44px; height:24px; flex-shrink:0; }
+.toggle input { opacity:0; width:0; height:0; position:absolute; }
+.toggle-track { position:absolute; inset:0; border-radius:99px; background:var(--border); cursor:pointer; transition:background .2s; }
+.toggle input:checked + .toggle-track { background:var(--primary); }
+.toggle-thumb { position:absolute; top:3px; left:3px; width:18px; height:18px; border-radius:50%; background:#fff; transition:transform .2s; pointer-events:none; }
+.toggle input:checked ~ .toggle-thumb { transform:translateX(20px); }
+
+/* EMPTY */
+.empty-state { text-align:center; padding:48px 24px; color:var(--text2); }
+.empty-state .big { font-size:3rem; margin-bottom:12px; }
+.empty-state p { margin-bottom:16px; }
+
+/* ANIMATIONS */
+@keyframes shake     { 0%,100%{transform:translateX(0)} 20%{transform:translateX(-8px)} 40%{transform:translateX(8px)} 60%{transform:translateX(-5px)} 80%{transform:translateX(5px)} }
+@keyframes bounce-in { 0%{transform:scale(.6);opacity:0} 60%{transform:scale(1.1);opacity:1} 100%{transform:scale(1)} }
+@keyframes float-up  { 0%{opacity:1;transform:translateY(0)} 100%{opacity:0;transform:translateY(-50px)} }
+.shake     { animation:shake .4s ease; }
+.bounce-in { animation:bounce-in .35s ease; }
+.xp-toast  { position:fixed; bottom:90px; right:20px; background:var(--warning); color:#1C1917; border-radius:99px; padding:6px 14px; font-weight:700; font-size:.85rem; pointer-events:none; z-index:200; animation:float-up 1.2s ease forwards; }
+
+/* RESPONSIVE */
+@media (max-width:360px) {
+  .mode-grid, .quiz-options, .match-grid { grid-template-columns:1fr; }
+}
+
+/* SVG ICONS */
+.ico { display:inline-block; width:1.2em; height:1.2em; vertical-align:middle; fill:currentColor; flex-shrink:0; }
+.ico-lg { width:1.6em; height:1.6em; }
+.ico-xl { width:2.2em; height:2.2em; }
+.btn-icon { background:none; border:none; cursor:pointer; color:var(--text2); padding:7px; border-radius:50%; transition:background .15s, color .15s; display:inline-flex; align-items:center; justify-content:center; }
+.btn-icon:hover { background:var(--border); color:var(--text); }
+.btn-icon.danger:hover { background:rgba(255,71,87,.12); color:var(--error); }
+
+/* MODE CARD gradient accents */
+.mode-card:nth-child(1) { border-top:3px solid var(--primary); }
+.mode-card:nth-child(2) { border-top:3px solid var(--secondary); }
+.mode-card:nth-child(3) { border-top:3px solid var(--accent); }
+.mode-card:nth-child(4) { border-top:3px solid var(--warning); }
+.mode-card:hover { border-color:inherit; transform:translateY(-3px); box-shadow:0 8px 24px rgba(0,0,0,.12); }
+.mode-card .mode-icon { font-size:0; line-height:0; margin-bottom:10px; color:var(--primary); }
+.mode-card:nth-child(2) .mode-icon { color:var(--secondary); }
+.mode-card:nth-child(3) .mode-icon { color:var(--accent); }
+.mode-card:nth-child(4) .mode-icon { color:#E8A020; }
+
+/* NAV tab active underline */
+.nav-tab.active { color:var(--primary); }
+.nav-tab.active::after { content:''; display:block; width:28px; height:3px; background:var(--primary); border-radius:99px; margin:2px auto 0; }
+
+/* Progress bar – teal */
+.prog-bar-fill { background: var(--grad-card); }
+
+/* Flashcard back – coral gradient */
+.fc-face.back { background:var(--grad-hero); border-color:transparent; }
+
+/* Quiz correct/wrong */
+.quiz-opt.correct { border-color:var(--success); background:rgba(68,207,108,.12); color:var(--success); }
+.quiz-opt.wrong   { border-color:var(--error);   background:rgba(255,71,87,.10);  color:var(--error); }
+
+/* Add-word inline button */
+.add-word-btn { display:flex; align-items:center; gap:8px; padding:13px 16px; background:var(--border); border:2px dashed var(--text2); border-radius:var(--radius-sm); cursor:pointer; color:var(--text2); font-weight:600; transition:all .2s; margin-bottom:12px; width:100%; }
+.add-word-btn:hover { border-color:var(--primary); color:var(--primary); background:rgba(255,107,107,.06); }
+
+
+/* MODAL */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:100; display:flex; align-items:flex-end; justify-content:center; }
+.modal-overlay.hidden { display:none; }
+.modal-box { background:var(--card); border-radius:var(--radius) var(--radius) 0 0; padding:20px; width:100%; max-width:500px; max-height:85dvh; overflow-y:auto; }
+.modal-header { display:flex; align-items:center; margin-bottom:16px; }
+.modal-header h3 { flex:1; font-size:1rem; }
+
+/* LIST SELECTOR in session start */
+.list-selector-wrap { margin-bottom:14px; }
+</style>
+</head>
+<body>
+
+<!-- SVG sprite – hidden, referenced via <use href="#ico-…"> -->
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- home -->
+  <symbol id="ico-home" viewBox="0 0 24 24"><path d="M3 12L12 3l9 9M5 10v9a1 1 0 001 1h4v-4h4v4h4a1 1 0 001-1v-9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- list -->
+  <symbol id="ico-list" viewBox="0 0 24 24"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <!-- book -->
+  <symbol id="ico-book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 4.5A2.5 2.5 0 016.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- settings gear -->
+  <symbol id="ico-settings" viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z" stroke="currentColor" stroke-width="2" fill="none"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <!-- plus -->
+  <symbol id="ico-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/></symbol>
+  <!-- back arrow -->
+  <symbol id="ico-back" viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- edit pencil -->
+  <symbol id="ico-edit" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- trash -->
+  <symbol id="ico-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- speaker -->
+  <symbol id="ico-speak" viewBox="0 0 24 24"><path d="M11 5L6 9H2v6h4l5 4V5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M19.07 4.93a10 10 0 010 14.14M15.54 8.46a5 5 0 010 7.07" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <!-- download -->
+  <symbol id="ico-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- upload -->
+  <symbol id="ico-upload" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- close X -->
+  <symbol id="ico-close" viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <!-- flashcard -->
+  <symbol id="ico-card" viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M2 10h20" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <!-- target/quiz -->
+  <symbol id="ico-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="6"  stroke="currentColor" stroke-width="2" fill="none"/><circle cx="12" cy="12" r="2"  stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <!-- keyboard/typing -->
+  <symbol id="ico-keyboard" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="12" rx="2" stroke="currentColor" stroke-width="2" fill="none"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M8 14h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></symbol>
+  <!-- link/match -->
+  <symbol id="ico-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- fire/streak -->
+  <symbol id="ico-fire" viewBox="0 0 24 24"><path d="M12 2c0 0-4 4-4 8a4 4 0 008 0c0-1.5-.5-3-1-4 0 0-1 2-2 2s-1-1-1-2c0-2 2-4 2-4z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M12 22c-4 0-7-3-7-7 0-2 1-4 2-5 0 2 1 3 2 3s2-1 2-3c2 2 3 4 3 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- star -->
+  <symbol id="ico-star" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- check -->
+  <symbol id="ico-check" viewBox="0 0 24 24"><path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- camera -->
+  <symbol id="ico-camera" viewBox="0 0 24 24"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/><circle cx="12" cy="13" r="4" stroke="currentColor" stroke-width="2" fill="none"/></symbol>
+  <!-- moon -->
+  <symbol id="ico-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- bell -->
+  <symbol id="ico-bell" viewBox="0 0 24 24"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- bolt/lightning -->
+  <symbol id="ico-bolt" viewBox="0 0 24 24"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+  <!-- refresh -->
+  <symbol id="ico-refresh" viewBox="0 0 24 24"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></symbol>
+</svg>
+
+<nav class="bottom-nav" role="navigation" aria-label="Main navigation">
+  <button class="nav-tab active" onclick="Router.go('home')" aria-label="Home">
+    <svg class="ico ico-lg"><use href="#ico-home"/></svg><span>Home</span>
+  </button>
+  <button class="nav-tab" onclick="Router.go('lists')" aria-label="Lists">
+    <svg class="ico ico-lg"><use href="#ico-list"/></svg><span>Lists</span>
+  </button>
+  <button class="nav-tab" onclick="Router.go('vocab')" aria-label="Words">
+    <svg class="ico ico-lg"><use href="#ico-book"/></svg><span>Words</span>
+  </button>
+  <button class="nav-tab" onclick="Router.go('settings')" aria-label="Settings">
+    <svg class="ico ico-lg"><use href="#ico-settings"/></svg><span>Settings</span>
+  </button>
+</nav>
+
+<!-- ============================================================
+     VIEW: HOME
+     ============================================================ -->
+<section id="view-home" class="view active" role="main">
+  <div class="top-bar">
+    <h2>FR&nbsp;↔&nbsp;DE Vocab</h2>
+    <span id="home-level" class="level-badge">Lv 1</span>
+  </div>
+  <div class="container">
+    <div class="streak-bar">
+      <div class="streak-fire"><svg class="ico" style="width:2rem;height:2rem;color:#fff"><use href="#ico-fire"/></svg></div>
+      <div class="streak-info">
+        <div id="streak-num" class="streak-num">0</div>
+        <div class="streak-label">day streak</div>
+        <div class="xp-bar-wrap">
+          <div class="xp-bar-track"><div id="xp-bar" class="xp-bar-fill" style="width:0%"></div></div>
+          <div id="xp-label" class="xp-label">0 / 50 XP</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- List selector -->
+    <div class="list-selector-wrap">
+      <label for="home-list-sel">Practice list</label>
+      <select id="home-list-sel" style="margin-top:4px" onchange="Home.onListChange()"></select>
+    </div>
+
+    <button class="btn btn-primary btn-full" style="margin-bottom:16px;font-size:1.05rem;padding:15px" onclick="startReview()">
+      🚀 Start Review
+    </button>
+
+    <div class="mode-grid">
+      <div class="mode-card" onclick="startMode('flashcard')">
+        <div class="mode-icon"><svg class="ico ico-xl"><use href="#ico-card"/></svg></div>
+        <div class="mode-name">Flashcards</div>
+        <div class="mode-desc">Flip &amp; rate</div>
+      </div>
+      <div class="mode-card" onclick="startMode('quiz')">
+        <div class="mode-icon"><svg class="ico ico-xl"><use href="#ico-target"/></svg></div>
+        <div class="mode-name">Quiz</div>
+        <div class="mode-desc">4 choices</div>
+      </div>
+      <div class="mode-card" onclick="startMode('typing')">
+        <div class="mode-icon"><svg class="ico ico-xl"><use href="#ico-keyboard"/></svg></div>
+        <div class="mode-name">Typing</div>
+        <div class="mode-desc">Type the answer</div>
+      </div>
+      <div class="mode-card" onclick="startMode('match')">
+        <div class="mode-icon"><svg class="ico ico-xl"><use href="#ico-link"/></svg></div>
+        <div class="mode-name">Match</div>
+        <div class="mode-desc">Pair words</div>
+      </div>
+    </div>
+
+    <div id="home-due-info" style="text-align:center;color:var(--text2);font-size:.85rem;padding:8px 0"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: LISTS
+     ============================================================ -->
+<section id="view-lists" class="view" role="main">
+  <div class="top-bar">
+    <h2>Vocabulary Lists</h2>
+    <button class="btn-icon" onclick="ListManager.openNew()" title="New list" aria-label="New list"><svg class="ico"><use href="#ico-plus"/></svg></button>
+  </div>
+  <div class="container">
+    <div id="lists-container"></div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: VOCAB MANAGER
+     ============================================================ -->
+<section id="view-vocab" class="view" role="main">
+  <div class="top-bar">
+    <button class="btn-icon" onclick="Router.go('lists')" aria-label="Back"><svg class="ico"><use href="#ico-back"/></svg></button>
+    <h2 id="vocab-title">Words</h2>
+  </div>
+  <div class="container">
+
+    <!-- Photo upload -->
+    <div class="photo-drop" id="photo-drop"
+         onclick="document.getElementById('photo-file').click()"
+         ondragover="event.preventDefault();this.classList.add('drag-over')"
+         ondragleave="this.classList.remove('drag-over')"
+         ondrop="VocabManager.onDrop(event)"
+         title="Upload vocab sheet photo" aria-label="Upload photo">
+      <div id="photo-preview">
+        <div style="margin-bottom:6px"><svg class="ico" style="width:2rem;height:2rem;color:var(--text2)"><use href="#ico-camera"/></svg></div>
+        <p>Tap to upload vocab sheet photo<br><small>(stays in browser only, not saved)</small></p>
+      </div>
+    </div>
+    <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="VocabManager.onFileChange(event)">
+
+    <!-- Bulk import -->
+    <details style="margin-bottom:16px">
+      <summary style="cursor:pointer;font-weight:700;padding:10px 0;color:var(--primary);display:flex;align-items:center;gap:6px"><svg class="ico"><use href="#ico-upload"/></svg> Bulk Import (plain text)</summary>
+      <div style="padding-top:10px">
+        <div class="form-group">
+          <label>Paste your word pairs (one per line, optional example on next line)</label>
+          <textarea id="bulk-text" placeholder="gare = Bahnhof&#10;Où est la gare ? = Wo ist der Bahnhof?&#10;&#10;le chat = die Katze&#10;&#10;bonjour = Hallo&#10;Bonjour, comment ça va ? = Hallo, wie geht es dir?" oninput="BulkImport.preview()"></textarea>
+        </div>
+        <div id="bulk-preview" class="import-preview" style="display:none"></div>
+        <div id="bulk-count"   class="import-count"></div>
+        <div style="margin-top:10px;display:flex;gap:8px">
+          <button class="btn btn-primary btn-sm" onclick="BulkImport.doImport()">Import</button>
+          <button class="btn btn-ghost btn-sm"   onclick="document.getElementById('bulk-text').value='';BulkImport.preview()">Clear</button>
+        </div>
+      </div>
+    </details>
+
+    <!-- Single entry form -->
+    <div id="word-form" class="card" style="display:none;margin-bottom:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+        <strong id="form-title">Add Word</strong>
+      <button class="btn-icon" onclick="VocabManager.toggleForm()" aria-label="Close"><svg class="ico"><use href="#ico-close"/></svg></button>
+      </div>
+      <input type="hidden" id="edit-idx" value="-1">
+      <div class="form-group">
+        <label for="inp-fr">French *</label>
+        <input id="inp-fr" placeholder="e.g. la gare" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="inp-tr">German *</label>
+        <input id="inp-tr" placeholder="e.g. der Bahnhof" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="inp-exfr">Example sentence (French)</label>
+        <input id="inp-exfr" placeholder="e.g. Où est la gare ?" autocomplete="off">
+      </div>
+      <div class="form-group">
+        <label for="inp-extr">Example sentence (German)</label>
+        <input id="inp-extr" placeholder="e.g. Wo ist der Bahnhof?" autocomplete="off">
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="VocabManager.save()">Save</button>
+        <button class="btn btn-ghost   btn-sm" onclick="VocabManager.toggleForm()">Cancel</button>
+      </div>
+    </div>
+
+    <div id="word-list" class="word-list">
+      <!-- add-word button rendered here by renderList() -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: FLASHCARD
+     ============================================================ -->
+<section id="view-flashcard" class="view" role="main">
+  <div class="top-bar">
+    <button class="btn-icon" onclick="endSession()" aria-label="Back"><svg class="ico"><use href="#ico-back"/></svg></button>
+    <h2>Flashcards</h2>
+  </div>
+  <div id="fc-progress" class="progress-header">
+    <div class="prog-bar-track"><div id="fc-bar" class="prog-bar-fill" style="width:0%"></div></div>
+    <span id="fc-prog-text" class="prog-text">0/0</span>
+  </div>
+  <div class="container" style="padding-top:0">
+    <div class="fc-scene" onclick="Flashcard.flip()" role="button" aria-label="Flip card">
+      <div id="fc-card" class="fc-card">
+        <div class="fc-face front">
+          <div id="fc-front-word" class="fc-word"></div>
+          <div id="fc-front-ex"   class="fc-sub"></div>
+          <button class="btn-icon" style="margin-top:4px" onclick="event.stopPropagation();Flashcard.speakFront()" aria-label="Pronounce front"><svg class="ico ico-lg"><use href="#ico-speak"/></svg></button>
+        </div>
+        <div class="fc-face back">
+          <div id="fc-back-word" class="fc-word"></div>
+          <div id="fc-back-ex"   class="fc-sub"></div>
+          <button class="btn-icon" style="margin-top:4px;color:#fff;opacity:.85" onclick="event.stopPropagation();Flashcard.speakBack()" aria-label="Pronounce back"><svg class="ico ico-lg"><use href="#ico-speak"/></svg></button>
+        </div>
+      </div>
+    </div>
+    <p class="fc-hint" id="fc-hint-text">Tap card to reveal translation</p>
+    <div class="fc-btns" id="fc-rating-btns" style="display:none">
+      <button class="btn btn-danger  btn-sm" onclick="Flashcard.rate(1)">Hard</button>
+      <button class="btn btn-ghost   btn-sm" onclick="Flashcard.rate(3)">OK</button>
+      <button class="btn btn-success btn-sm" onclick="Flashcard.rate(5)">Easy</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: QUIZ
+     ============================================================ -->
+<section id="view-quiz" class="view" role="main">
+  <div class="top-bar">
+    <button class="btn-icon" onclick="endSession()" aria-label="Back"><svg class="ico"><use href="#ico-back"/></svg></button>
+    <h2>Quiz</h2>
+    <span id="qz-dir-badge" class="badge badge-primary" style="font-size:.7rem"></span>
+  </div>
+  <div class="progress-header">
+    <div class="prog-bar-track"><div id="qz-bar" class="prog-bar-fill" style="width:0%"></div></div>
+    <span id="qz-prog-text" class="prog-text">0/0</span>
+  </div>
+  <div class="container" style="padding-top:0">
+    <div id="qz-q"    class="quiz-q"></div>
+    <div id="qz-sub"  style="text-align:center;color:var(--text2);font-size:.8rem;margin:-8px 0 10px"></div>
+    <div id="qz-opts" class="quiz-options" role="list"></div>
+    <div id="qz-next-wrap" style="text-align:center;padding:16px;display:none">
+      <button class="btn btn-primary" onclick="Quiz.next()">Next <svg class="ico"><use href="#ico-check"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: TYPING
+     ============================================================ -->
+<section id="view-typing" class="view" role="main">
+  <div class="top-bar">
+    <button class="btn-icon" onclick="endSession()" aria-label="Back"><svg class="ico"><use href="#ico-back"/></svg></button>
+    <h2>Typing</h2>
+    <span id="ty-dir-badge" class="badge badge-primary" style="font-size:.7rem"></span>
+  </div>
+  <div class="progress-header">
+    <div class="prog-bar-track"><div id="ty-bar" class="prog-bar-fill" style="width:0%"></div></div>
+    <span id="ty-prog-text" class="prog-text">0/0</span>
+  </div>
+  <div class="container" style="padding-top:0">
+    <div id="ty-q"   class="typing-q"></div>
+    <div id="ty-sub" class="typing-sub"></div>
+    <div class="typing-input-wrap">
+      <input id="ty-inp" type="text" placeholder="Type translation…" autocomplete="off" autocorrect="off" spellcheck="false"
+             onkeydown="if(event.key==='Enter')Typing.submit()">
+      <button class="typing-submit" onclick="Typing.submit()" aria-label="Submit"><svg class="ico"><use href="#ico-check"/></svg></button>
+    </div>
+    <div id="ty-feedback" class="typing-feedback"></div>
+    <div class="accent-bar" id="accent-bar"></div>
+    <div style="text-align:center;margin:4px 0">
+      <button class="btn btn-ghost btn-sm" onclick="Typing.hint()" id="ty-hint-btn"><svg class="ico"><use href="#ico-bolt"/></svg> Hint (−5 XP)</button>
+    </div>
+    <div id="ty-next-wrap" style="text-align:center;padding:12px;display:none">
+      <button class="btn btn-primary" onclick="Typing.next()">Next <svg class="ico"><use href="#ico-check"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: MATCH
+     ============================================================ -->
+<section id="view-match" class="view" role="main">
+  <div class="top-bar">
+    <button class="btn-icon" onclick="endSession()" aria-label="Back"><svg class="ico"><use href="#ico-back"/></svg></button>
+    <h2>Match</h2>
+  </div>
+  <div class="container">
+    <div id="match-timer" class="match-timer"></div>
+    <div id="match-grid" class="match-grid">
+      <div class="match-col" id="match-col-fr"></div>
+      <div class="match-col" id="match-col-tr"></div>
+    </div>
+    <div id="match-next-wrap" style="text-align:center;padding:16px;display:none">
+      <button class="btn btn-primary" onclick="Match.nextRound()">Next Round <svg class="ico"><use href="#ico-check"/></svg></button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: COMPLETE
+     ============================================================ -->
+<section id="view-complete" class="view" role="main">
+  <div class="top-bar"><h2>Session Complete!</h2></div>
+  <div class="container">
+    <div class="card complete-card">
+      <div class="complete-emoji"><svg class="ico" style="width:4rem;height:4rem;color:var(--warning)"><use href="#ico-star"/></svg></div>
+      <div id="cmp-title" class="complete-title">Great work!</div>
+      <div id="cmp-sub"   class="complete-sub"></div>
+      <div class="stats-row">
+        <div class="stat-box"><div id="cmp-correct" class="stat-num">0</div><div class="stat-lbl">Correct</div></div>
+        <div class="stat-box"><div id="cmp-xp"      class="stat-num">+0</div><div class="stat-lbl">XP earned</div></div>
+        <div class="stat-box"><div id="cmp-streak" class="stat-num" style="display:flex;align-items:center;justify-content:center;gap:4px"><span>0</span><svg class="ico" style="color:var(--primary)"><use href="#ico-fire"/></svg></div><div class="stat-lbl">Streak</div></div>
+      </div>
+      <button class="btn btn-primary btn-full" onclick="Router.go('home');Home.refresh()" style="margin-bottom:10px">
+        <svg class="ico"><use href="#ico-home"/></svg> Home
+      </button>
+      <button class="btn btn-ghost btn-full" onclick="startReview()">
+        <svg class="ico"><use href="#ico-refresh"/></svg> Practice Again
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     VIEW: SETTINGS
+     ============================================================ -->
+<section id="view-settings" class="view" role="main">
+  <div class="top-bar"><h2>Settings</h2></div>
+  <div class="container">
+
+    <div class="settings-section">
+      <h3>Appearance</h3>
+      <div class="settings-row">
+        <div class="label">Dark Mode</div>
+        <label class="toggle" aria-label="Toggle dark mode">
+          <input type="checkbox" id="tog-dark" onchange="Settings.setDark(this.checked)">
+          <div class="toggle-track"></div><div class="toggle-thumb"></div>
+        </label>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Voice</h3>
+      <div class="settings-row" style="flex-direction:column;align-items:stretch">
+        <label for="voice-fr-sel">French voice</label>
+        <select id="voice-fr-sel" onchange="Settings.setVoice('fr',this.value)" style="margin-top:6px"></select>
+      </div>
+      <div class="settings-row" style="flex-direction:column;align-items:stretch">
+        <label for="voice-de-sel">German voice</label>
+        <select id="voice-de-sel" onchange="Settings.setVoice('de',this.value)" style="margin-top:6px"></select>
+      </div>
+      <div class="settings-row">
+        <div class="label">Test voices</div>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost btn-sm" onclick="Speech.speak('Où est la gare ?','fr')"><svg class="ico"><use href="#ico-speak"/></svg> FR</button>
+          <button class="btn btn-ghost btn-sm" onclick="Speech.speak('Wo ist der Bahnhof?','de')"><svg class="ico"><use href="#ico-speak"/></svg> DE</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Daily Reminder</h3>
+      <div class="settings-row">
+        <div><div class="label">Enable Nag</div><div class="sub">Daily practice reminder</div></div>
+        <label class="toggle" aria-label="Toggle daily reminder">
+          <input type="checkbox" id="tog-nag" onchange="Settings.setNag(this.checked)">
+          <div class="toggle-track"></div><div class="toggle-thumb"></div>
+        </label>
+      </div>
+      <div class="settings-row">
+        <label for="nag-time" style="margin:0;flex:1">Reminder time</label>
+        <input type="time" id="nag-time" style="width:120px" onchange="Settings.setNagTime(this.value)">
+      </div>
+    </div>
+
+    <div class="settings-section">
+      <h3>Data</h3>
+      <div class="settings-row">
+        <div class="label">Export all data (JSON)</div>
+        <button class="btn btn-ghost btn-sm" onclick="Settings.exportAll()"><svg class="ico"><use href="#ico-download"/></svg> Export</button>
+      </div>
+      <div class="settings-row">
+        <div class="label">Import data (JSON)</div>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('import-file').click()"><svg class="ico"><use href="#ico-upload"/></svg> Import</button>
+        <input type="file" id="import-file" accept=".json" style="display:none" onchange="Settings.importData(event)">
+      </div>
+      <div class="settings-row">
+        <div><div class="label" style="color:var(--error)">Reset all data</div><div class="sub">Cannot be undone!</div></div>
+        <button class="btn btn-danger btn-sm" onclick="Settings.resetAll()"><svg class="ico"><use href="#ico-trash"/></svg> Reset</button>
+      </div>
+    </div>
+
+    <p style="text-align:center;color:var(--text2);font-size:.75rem;padding:8px 0">
+      French–German Vocab App · Runs entirely in your browser
+    </p>
+  </div>
+</section>
+
+<!-- ============================================================
+     MODAL: New / Edit List
+     ============================================================ -->
+<div id="modal-list" class="modal-overlay hidden" onclick="if(event.target===this)ListManager.closeModal()">
+  <div class="modal-box">
+    <div class="modal-header">
+      <h3 id="modal-list-title">New List</h3>
+      <button class="btn-icon" onclick="ListManager.closeModal()"><svg class="ico"><use href="#ico-close"/></svg></button>
+    </div>
+    <div class="form-group">
+      <label for="modal-list-name">List name *</label>
+      <input id="modal-list-name" placeholder="e.g. Chapter 3 – Transport" autocomplete="off"
+             onkeydown="if(event.key==='Enter')ListManager.saveModal()">
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary btn-sm" onclick="ListManager.saveModal()">Save</button>
+      <button class="btn btn-ghost   btn-sm" onclick="ListManager.closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+     ============================================================ -->
+<script>
+'use strict';
+
+/* ============================================================
+   DB
+   ============================================================ */
+const DB = {
+  get(key, fb) {
+    try { const v = localStorage.getItem('frapp_'+key); return v ? JSON.parse(v) : fb; }
+    catch(e) { return fb; }
+  },
+  set(key, val) {
+    try { localStorage.setItem('frapp_'+key, JSON.stringify(val)); } catch(e) {}
+  },
+  // Lists: [{id, name, createdAt}]
+  lists()       { return DB.get('lists', []); },
+  setLists(l)   { DB.set('lists', l); },
+  // Words per list: keyed by listId
+  wordsFor(lid) { return DB.get('words_'+lid, []); },
+  setWordsFor(lid, w) { DB.set('words_'+lid, w); },
+  // All words across all lists (for quiz distractors)
+  allWords() {
+    return DB.lists().flatMap(l => DB.wordsFor(l.id));
+  },
+  gamification()    { return DB.get('gamification', {xp:0,level:1,streak:0,lastPracticeDate:''}); },
+  setGamification(g){ DB.set('gamification', g); },
+  settings()        { return DB.get('settings', {darkMode:false,nagEnabled:false,nagHour:18,nagMinute:0,voiceURIfr:'',voiceURIde:'',lastMode:'flashcard',lastListId:''}); },
+  setSettings(s)    { DB.set('settings', s); },
+};
+
+/* ============================================================
+   GAMIFICATION
+   ============================================================ */
+const LEVELS = [0,50,120,220,360,550,800,1100,1500,2000,2600];
+const Gamification = {
+  addXP(amount) {
+    const g = DB.gamification();
+    g.xp += amount;
+    const newLevel = LEVELS.filter(t => g.xp >= t).length;
+    if (newLevel > g.level) {
+      g.level = newLevel;
+      setTimeout(() => UI.xpToast('Level Up! Lv '+g.level+' 🎯'), 500);
+    } else {
+      g.level = newLevel;
+    }
+    DB.setGamification(g);
+    UI.xpToast('+'+amount+' XP');
+    return g;
+  },
+  updateStreak() {
+    const g = DB.gamification();
+    const today = new Date().toDateString();
+    const yest  = new Date(Date.now()-86400000).toDateString();
+    if (g.lastPracticeDate === today) return g;
+    g.streak = (g.lastPracticeDate === yest) ? g.streak+1 : 1;
+    g.lastPracticeDate = today;
+    DB.setGamification(g);
+    return g;
+  },
+  xpForNextLevel(g) {
+    const next = LEVELS[g.level] || LEVELS[LEVELS.length-1];
+    const cur  = LEVELS[g.level-1] || 0;
+    return { cur, next, pct: Math.min(100, Math.round((g.xp-cur)/(next-cur)*100)) };
+  },
+};
+
+/* ============================================================
+   SR – SM-2
+   ============================================================ */
+const SR = {
+  newEntry(fr, trans, exFr, exTrans) {
+    return { fr, trans, exFr:exFr||'', exTrans:exTrans||'',
+             repetitions:0, interval:1, easeFactor:2.5,
+             nextReview:Date.now(), mastery:0 };
+  },
+  update(word, q) {
+    if (q < 3) { word.repetitions=0; word.interval=1; }
+    else {
+      if      (word.repetitions === 0) word.interval = 1;
+      else if (word.repetitions === 1) word.interval = 3;
+      else word.interval = Math.round(word.interval * word.easeFactor);
+      word.repetitions++;
+    }
+    word.easeFactor = Math.max(1.3, word.easeFactor + 0.1 - (5-q)*(0.08+(5-q)*0.02));
+    word.nextReview = Date.now() + word.interval*86400000;
+    word.mastery    = Math.min(5, word.repetitions);
+    return word;
+  },
+  dueWords(words) { return words.filter(w => w.nextReview <= Date.now()); },
+};
+
+/* ============================================================
+   SPEECH
+   ============================================================ */
+const Speech = {
+  voices: [],
+  _ready: false,
+  init() {
+    const load = () => {
+      Speech.voices = speechSynthesis.getVoices();
+      Speech._ready = Speech.voices.length > 0;
+      // Warm-up: create a silent utterance so the engine is primed
+      if (Speech._ready) {
+        const warm = new SpeechSynthesisUtterance(' ');
+        warm.volume = 0;
+        speechSynthesis.speak(warm);
+      }
+    };
+    speechSynthesis.addEventListener('voiceschanged', load);
+    const v = speechSynthesis.getVoices();
+    if (v.length) { Speech.voices = v; Speech._ready = true; }
+  },
+  byLang(lang) { return Speech.voices.filter(v => v.lang.startsWith(lang)); },
+  speak(text, lang) {
+    if (!text || !text.trim()) return;
+    // Cancel and resume to fix Chrome's stall bug
+    speechSynthesis.cancel();
+    // Small delay ensures cancel() completes before new utterance
+    setTimeout(() => {
+      // Keep engine awake on long texts
+      const keepAlive = setInterval(() => speechSynthesis.resume(), 10000);
+      const utt = new SpeechSynthesisUtterance(text);
+      const s   = DB.settings();
+      const uri = lang === 'de' ? s.voiceURIde : s.voiceURIfr;
+      const v   = Speech.voices.find(v => v.voiceURI === uri)
+               || Speech.byLang(lang === 'de' ? 'de' : 'fr')[0];
+      if (v) utt.voice = v;
+      utt.lang  = lang === 'de' ? 'de-DE' : 'fr-FR';
+      utt.rate  = 0.85;
+      utt.pitch = 1;
+      utt.onend = () => clearInterval(keepAlive);
+      utt.onerror = () => clearInterval(keepAlive);
+      speechSynthesis.speak(utt);
+    }, 80);
+  },
+};
+
+/* ============================================================
+   ROUTER
+   ============================================================ */
+const TAB_MAP = {home:0, lists:1, vocab:2, settings:3};
+const Router = {
+  current: 'home',
+  go(id) {
+    const cur  = document.getElementById('view-'+Router.current);
+    const next = document.getElementById('view-'+id);
+    if (!next) return;
+    if (cur && cur !== next) {
+      cur.classList.add('leaving');
+      setTimeout(() => cur.classList.remove('active','leaving'), 280);
+    }
+    next.classList.add('active');
+    Router.current = id;
+    document.querySelectorAll('.nav-tab').forEach((t,i) => t.classList.toggle('active', TAB_MAP[id]===i));
+  },
+};
+
+/* ============================================================
+   UI helpers
+   ============================================================ */
+const UI = {
+  xpToast(msg) {
+    const el = document.createElement('div');
+    el.className = 'xp-toast'; el.textContent = msg;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1200);
+  },
+  confetti() {
+    if (typeof confetti === 'function') confetti({particleCount:120,spread:70,origin:{y:.6}});
+  },
+  masteryStars(n) { return '★'.repeat(n)+'☆'.repeat(5-n); },
+};
+
+function esc(s) {
+  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+function genId() { return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function shuffle(arr) {
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}
+  return a;
+}
+
+/* ============================================================
+   LIST MANAGER
+   ============================================================ */
+const ListManager = {
+  _editId: null,
+
+  render() {
+    const lists = DB.lists();
+    const el = document.getElementById('lists-container');
+    if (!lists.length) {
+      el.innerHTML = `<div class="empty-state"><div class="big" style="font-size:0;line-height:0;margin-bottom:12px"><svg class="ico" style="width:3rem;height:3rem;color:var(--text2)"><use href="#ico-list"/></svg></div><p>No lists yet.<br>Tap + to create your first list.</p></div>`;
+      return;
+    }
+    el.innerHTML = lists.map(l => {
+      const words = DB.wordsFor(l.id);
+      const due   = SR.dueWords(words).length;
+      return `
+      <div class="card" style="margin-bottom:12px">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+          <div style="flex:1">
+            <div style="font-weight:700;font-size:1rem">${esc(l.name)}</div>
+            <div style="font-size:.78rem;color:var(--text2)">${words.length} word${words.length!==1?'s':''} · ${due} due</div>
+          </div>
+          <button class="btn-icon" onclick="ListManager.openEdit('${l.id}')" aria-label="Edit list"><svg class="ico"><use href="#ico-edit"/></svg></button>
+          <button class="btn-icon" onclick="ListManager.exportList('${l.id}')" aria-label="Export list"><svg class="ico"><use href="#ico-download"/></svg></button>
+          <button class="btn-icon danger" onclick="ListManager.deleteList('${l.id}')" aria-label="Delete list"><svg class="ico"><use href="#ico-trash"/></svg></button>
+        </div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="openVocabForList('${l.id}')"><svg class="ico"><use href="#ico-book"/></svg> Edit Words</button>
+          <button class="btn btn-ghost   btn-sm" onclick="startModeForList('flashcard','${l.id}')"><svg class="ico"><use href="#ico-card"/></svg> Study</button>
+        </div>
+      </div>`;
+    }).join('');
+  },
+
+  openNew() {
+    ListManager._editId = null;
+    document.getElementById('modal-list-title').textContent = 'New List';
+    document.getElementById('modal-list-name').value = '';
+    document.getElementById('modal-list').classList.remove('hidden');
+    setTimeout(() => document.getElementById('modal-list-name').focus(), 50);
+  },
+  openEdit(id) {
+    const l = DB.lists().find(x=>x.id===id); if (!l) return;
+    ListManager._editId = id;
+    document.getElementById('modal-list-title').textContent = 'Rename List';
+    document.getElementById('modal-list-name').value = l.name;
+    document.getElementById('modal-list').classList.remove('hidden');
+    setTimeout(() => document.getElementById('modal-list-name').focus(), 50);
+  },
+  saveModal() {
+    const name = document.getElementById('modal-list-name').value.trim();
+    if (!name) { alert('Please enter a name.'); return; }
+    const lists = DB.lists();
+    if (ListManager._editId) {
+      const l = lists.find(x=>x.id===ListManager._editId);
+      if (l) l.name = name;
+    } else {
+      lists.push({ id:genId(), name, createdAt:Date.now() });
+    }
+    DB.setLists(lists);
+    ListManager.closeModal();
+    ListManager.render();
+    Home.populateListSelector();
+  },
+  closeModal() {
+    document.getElementById('modal-list').classList.add('hidden');
+  },
+  deleteList(id) {
+    const l = DB.lists().find(x=>x.id===id);
+    if (!l) return;
+    if (!confirm(`Delete list "${l.name}" and all its words?`)) return;
+    const lists = DB.lists().filter(x=>x.id!==id);
+    DB.setLists(lists);
+    localStorage.removeItem('frapp_words_'+id);
+    ListManager.render();
+    Home.populateListSelector();
+  },
+  exportList(id) {
+    const l = DB.lists().find(x=>x.id===id); if (!l) return;
+    const words = DB.wordsFor(id);
+    const data = { list: l, words, exported: new Date().toISOString() };
+    const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = l.name.replace(/[^a-z0-9]/gi,'_')+'.json';
+    a.click();
+  },
+};
+
+/* ============================================================
+   HOME
+   ============================================================ */
+let _currentListId = '';
+const Home = {
+  refresh() {
+    const g  = DB.gamification();
+    const lv = Gamification.xpForNextLevel(g);
+    document.getElementById('streak-num').textContent  = g.streak;
+    document.getElementById('xp-bar').style.width      = lv.pct+'%';
+    document.getElementById('xp-label').textContent    = g.xp+' / '+lv.next+' XP';
+    document.getElementById('home-level').textContent  = 'Lv '+g.level;
+    Home.populateListSelector();
+    Home.updateDueInfo();
+  },
+  populateListSelector() {
+    const sel   = document.getElementById('home-list-sel');
+    const lists = DB.lists();
+    const s     = DB.settings();
+    sel.innerHTML = '<option value="">All words</option>'
+      + lists.map(l=>`<option value="${esc(l.id)}">${esc(l.name)}</option>`).join('');
+    // restore last selection
+    if (s.lastListId && lists.find(x=>x.id===s.lastListId)) sel.value = s.lastListId;
+    _currentListId = sel.value;
+    Home.updateDueInfo();
+  },
+  onListChange() {
+    _currentListId = document.getElementById('home-list-sel').value;
+    const s = DB.settings(); s.lastListId = _currentListId; DB.setSettings(s);
+    Home.updateDueInfo();
+  },
+  updateDueInfo() {
+    const info  = document.getElementById('home-due-info');
+    const words = Home._activeWords();
+    if (!words.length) { info.textContent = _currentListId ? 'No words in this list yet.' : 'Add some words to get started!'; return; }
+    const due = SR.dueWords(words);
+    info.textContent = due.length ? `${due.length} word${due.length>1?'s':''} due for review` : 'All caught up! ✅';
+  },
+  _activeWords() {
+    if (_currentListId) return DB.wordsFor(_currentListId);
+    return DB.allWords();
+  },
+};
+
+/* ============================================================
+   VOCAB MANAGER
+   ============================================================ */
+let _vocabListId = '';
+const VocabManager = {
+  openForList(lid) {
+    _vocabListId = lid;
+    const l = DB.lists().find(x=>x.id===lid);
+    document.getElementById('vocab-title').textContent = (l?l.name:'Words');
+    VocabManager.renderList();
+    Router.go('vocab');
+  },
+  toggleForm(show) {
+    const f = document.getElementById('word-form');
+    const vis = show !== undefined ? show : f.style.display==='none';
+    f.style.display = vis ? 'block' : 'none';
+    if (vis) {
+      document.getElementById('form-title').textContent = 'Add Word';
+      document.getElementById('edit-idx').value = '-1';
+      ['inp-fr','inp-tr','inp-exfr','inp-extr'].forEach(id=>document.getElementById(id).value='');
+      document.getElementById('inp-fr').focus();
+    }
+  },
+  save() {
+    const fr   = document.getElementById('inp-fr').value.trim();
+    const tr   = document.getElementById('inp-tr').value.trim();
+    const exfr = document.getElementById('inp-exfr').value.trim();
+    const extr = document.getElementById('inp-extr').value.trim();
+    if (!fr||!tr) { alert('French and German are required.'); return; }
+    if (!_vocabListId) { alert('Please open a list first.'); return; }
+    const words = DB.wordsFor(_vocabListId);
+    const idx   = parseInt(document.getElementById('edit-idx').value);
+    if (idx>=0) { words[idx] = {...words[idx], fr, trans:tr, exFr:exfr, exTrans:extr}; }
+    else        { words.push(SR.newEntry(fr,tr,exfr,extr)); }
+    DB.setWordsFor(_vocabListId, words);
+    VocabManager.toggleForm(false);
+    VocabManager.renderList();
+  },
+  edit(i) {
+    const w = DB.wordsFor(_vocabListId)[i]; if (!w) return;
+    document.getElementById('edit-idx').value  = i;
+    document.getElementById('inp-fr').value    = w.fr;
+    document.getElementById('inp-tr').value    = w.trans;
+    document.getElementById('inp-exfr').value  = w.exFr||'';
+    document.getElementById('inp-extr').value  = w.exTrans||'';
+    document.getElementById('form-title').textContent = 'Edit Word';
+    VocabManager.toggleForm(true);
+  },
+  del(i) {
+    if (!confirm('Delete this word?')) return;
+    const words = DB.wordsFor(_vocabListId);
+    words.splice(i,1);
+    DB.setWordsFor(_vocabListId, words);
+    VocabManager.renderList();
+  },
+  renderList() {
+    const words = DB.wordsFor(_vocabListId);
+    const el    = document.getElementById('word-list');
+    const addBtn = `<button class="add-word-btn" onclick="VocabManager.toggleForm()"><svg class="ico" style="color:var(--primary)"><use href="#ico-plus"/></svg>Add a word or phrase</button>`;
+    if (!words.length) {
+      el.innerHTML = addBtn + `<div class="empty-state" style="padding:20px"><div style="font-size:2.5rem;margin-bottom:8px">📝</div><p>No words yet — use the button above or Bulk Import.</p></div>`;
+      return;
+    }
+    el.innerHTML = addBtn + words.map((w,i) => {
+      const frSafe = esc(w.fr).replace(/'/g,'&#39;');
+      const deSafe = esc(w.trans).replace(/'/g,'&#39;');
+      return `
+      <div class="word-item">
+        <div class="word-item-text">
+          <div class="word-fr">${esc(w.fr)}</div>
+          <div class="word-tr">${esc(w.trans)}</div>
+          ${w.exFr ? `<div class="word-ex">${esc(w.exFr)} · ${esc(w.exTrans||'')}</div>` : ''}
+        </div>
+        <div class="mastery-stars" title="${w.mastery||0}/5">${UI.masteryStars(w.mastery||0)}</div>
+        <div class="word-actions">
+          <button class="btn-icon" onclick="Speech.speak('${frSafe}','fr')" aria-label="Speak French" title="Speak French"><svg class="ico"><use href="#ico-speak"/></svg></button>
+          <button class="btn-icon" onclick="Speech.speak('${deSafe}','de')" aria-label="Speak German" title="Speak German" style="font-size:.65rem;font-weight:700;color:var(--text2);padding:5px 7px;border-radius:6px;background:var(--border);border:none;cursor:pointer;line-height:1">DE</button>
+          <button class="btn-icon" onclick="VocabManager.edit(${i})"  aria-label="Edit"><svg class="ico"><use href="#ico-edit"/></svg></button>
+          <button class="btn-icon danger" onclick="VocabManager.del(${i})" aria-label="Delete"><svg class="ico"><use href="#ico-trash"/></svg></button>
+        </div>
+      </div>`;
+    }).join('');
+  },
+  onDrop(e) {
+    e.preventDefault();
+    document.getElementById('photo-drop').classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file&&file.type.startsWith('image/')) VocabManager._showPhoto(file);
+  },
+  onFileChange(e) {
+    const file = e.target.files[0];
+    if (file) VocabManager._showPhoto(file);
+  },
+  _showPhoto(file) {
+    const url  = URL.createObjectURL(file);
+    const prev = document.getElementById('photo-preview');
+    prev.innerHTML = `<img src="${url}" alt="Vocab sheet"><p>Use as reference to enter words ↓</p>`;
+  },
+};
+
+/* ============================================================
+   BULK IMPORT
+   ============================================================ */
+const BulkImport = {
+  _parsed: [],
+
+  _parseSep(line) {
+    // auto-detect: tab, then =, then ;, then comma
+    if (line.includes('\t')) { const p=line.split('\t'); return [p[0].trim(), p.slice(1).join('\t').trim()]; }
+    if (line.includes('='))  { const i=line.indexOf('='); return [line.slice(0,i).trim(), line.slice(i+1).trim()]; }
+    if (line.includes(';'))  { const p=line.split(';');  return [p[0].trim(), p.slice(1).join(';').trim()]; }
+    if (line.includes(','))  { const p=line.split(',');  return [p[0].trim(), p.slice(1).join(',').trim()]; }
+    return null;
+  },
+
+  parse(text) {
+    // Split into blocks by blank lines
+    const blocks = text.split(/\n\s*\n/).map(b=>b.trim()).filter(Boolean);
+    const entries = [];
+    for (const block of blocks) {
+      const lines = block.split('\n').map(l=>l.trim()).filter(Boolean);
+      if (!lines.length) continue;
+      const first = BulkImport._parseSep(lines[0]);
+      if (!first) continue;
+      const entry = SR.newEntry(first[0], first[1], '', '');
+      if (lines.length >= 2) {
+        const ex = BulkImport._parseSep(lines[1]);
+        if (ex) { entry.exFr = ex[0]; entry.exTrans = ex[1]; }
+      }
+      entries.push(entry);
+    }
+    return entries;
+  },
+
+  preview() {
+    const text = document.getElementById('bulk-text').value;
+    const prev = document.getElementById('bulk-preview');
+    const cnt  = document.getElementById('bulk-count');
+    if (!text.trim()) { prev.style.display='none'; cnt.textContent=''; BulkImport._parsed=[]; return; }
+    BulkImport._parsed = BulkImport.parse(text);
+    prev.style.display = 'block';
+    prev.textContent   = BulkImport._parsed.map(e =>
+      `${e.fr} → ${e.trans}${e.exFr ? '\n  ex: '+e.exFr+' / '+e.exTrans : ''}`
+    ).join('\n\n');
+    cnt.textContent = BulkImport._parsed.length
+      ? `✅ ${BulkImport._parsed.length} entr${BulkImport._parsed.length===1?'y':'ies'} detected`
+      : '⚠️ No entries detected';
+  },
+
+  doImport() {
+    if (!_vocabListId) { alert('Please open a list first.'); return; }
+    if (!BulkImport._parsed.length) { alert('Nothing to import. Check your text format.'); return; }
+    const existing = DB.wordsFor(_vocabListId);
+    const merged   = [...existing, ...BulkImport._parsed];
+    DB.setWordsFor(_vocabListId, merged);
+    document.getElementById('bulk-text').value = '';
+    BulkImport._parsed = [];
+    BulkImport.preview();
+    VocabManager.renderList();
+    alert(`Imported ${BulkImport._parsed.length || merged.length - existing.length} word(s)!`);
+  },
+};
+
+/* ============================================================
+   SESSION
+   ============================================================ */
+const State = { words:[], index:0, score:0, xpEarned:0, mode:'', listId:'' };
+
+function getSessionWords(listId, preferDue) {
+  const words = listId ? DB.wordsFor(listId) : DB.allWords();
+  if (!words.length) return [];
+  const due  = SR.dueWords(words);
+  const pool = (preferDue && due.length) ? due : words;
+  return shuffle(pool).slice(0,20);
+}
+
+function openVocabForList(lid)             { VocabManager.openForList(lid); }
+function startModeForList(mode, lid)       { _currentListId = lid; startMode(mode); }
+
+function startReview() {
+  const s = DB.settings();
+  startMode(s.lastMode||'flashcard');
+}
+
+function startMode(mode) {
+  const lid   = _currentListId;
+  const words = getSessionWords(lid, true);
+  if (!words.length) {
+    alert('No words yet! Add some words first.');
+    Router.go(lid ? 'vocab' : 'lists');
+    return;
+  }
+  const s = DB.settings(); s.lastMode = mode; DB.setSettings(s);
+  State.words    = words;
+  State.index    = 0;
+  State.score    = 0;
+  State.xpEarned = 0;
+  State.mode     = mode;
+  State.listId   = lid;
+
+  if      (mode==='flashcard') { Flashcard.init(); Router.go('flashcard'); }
+  else if (mode==='quiz')      { Quiz.init();      Router.go('quiz'); }
+  else if (mode==='typing')    { Typing.init();    Router.go('typing'); }
+  else if (mode==='match')     { Match.init();     Router.go('match'); }
+}
+
+function endSession() { if (confirm('End session?')) Router.go('home'); }
+
+function onComplete() {
+  Gamification.updateStreak();
+  const bonus = State.words.length>=10 ? 25 : 0;
+  if (bonus) Gamification.addXP(bonus);
+  const g = DB.gamification();
+  document.getElementById('cmp-correct').textContent = State.score;
+  document.getElementById('cmp-xp').textContent      = '+'+(State.xpEarned+bonus);
+  document.getElementById('cmp-streak').querySelector('span').textContent = g.streak;
+  document.getElementById('cmp-sub').textContent     = `${State.score}/${State.words.length} correct · ${State.mode}`;
+  Router.go('complete');
+  UI.confetti();
+  Home.refresh();
+}
+
+function updateProgressBar(prefix, idx, total) {
+  const pct = Math.round(idx/total*100);
+  document.getElementById(prefix+'-bar').style.width   = pct+'%';
+  document.getElementById(prefix+'-prog-text').textContent = idx+'/'+total;
+}
+
+/* ============================================================
+   FLASHCARD
+   ============================================================ */
+const Flashcard = {
+  flipped: false,
+  dir: 'fr2de',
+  init() { Flashcard.flipped=false; Flashcard.renderCurrent(); },
+  speakFront() {
+    const w = State.words[State.index]; if (!w) return;
+    const lang = Flashcard.dir==='fr2de' ? 'fr' : 'de';
+    const text = Flashcard.dir==='fr2de' ? w.fr : w.trans;
+    Speech.speak(text, lang);
+  },
+  speakBack() {
+    const w = State.words[State.index]; if (!w) return;
+    const lang = Flashcard.dir==='fr2de' ? 'de' : 'fr';
+    const text = Flashcard.dir==='fr2de' ? w.trans : w.fr;
+    Speech.speak(text, lang);
+  },
+  renderCurrent() {
+    const w = State.words[State.index];
+    if (!w) { onComplete(); return; }
+    updateProgressBar('fc', State.index, State.words.length);
+    Flashcard.dir = State.index%2===0 ? 'fr2de' : 'de2fr';
+    const card = document.getElementById('fc-card');
+    card.classList.remove('flipped');
+    Flashcard.flipped = false;
+
+    const frontWord = Flashcard.dir==='fr2de' ? w.fr   : w.trans;
+    const frontEx   = Flashcard.dir==='fr2de' ? w.exFr : w.exTrans;
+    const backWord  = Flashcard.dir==='fr2de' ? w.trans : w.fr;
+    const backEx    = Flashcard.dir==='fr2de' ? w.exTrans : w.exFr;
+    document.getElementById('fc-front-word').textContent = frontWord;
+    document.getElementById('fc-front-ex').textContent   = frontEx||'';
+    document.getElementById('fc-back-word').textContent  = backWord;
+    document.getElementById('fc-back-ex').textContent    = backEx||'';
+    document.getElementById('fc-hint-text').textContent  = 'Tap card to reveal translation';
+    document.getElementById('fc-rating-btns').style.display = 'none';
+  },
+  flip() {
+    Flashcard.flipped = !Flashcard.flipped;
+    document.getElementById('fc-card').classList.toggle('flipped', Flashcard.flipped);
+    document.getElementById('fc-hint-text').textContent = Flashcard.flipped ? 'Rate how well you knew this:' : 'Tap card to reveal translation';
+    document.getElementById('fc-rating-btns').style.display = Flashcard.flipped ? 'flex' : 'none';
+  },
+  rate(q) {
+    const xpMap={1:1,3:4,5:8};
+    const xp=xpMap[q]||4;
+    Gamification.addXP(xp); State.xpEarned+=xp;
+    if (q>=3) State.score++;
+    const cur=State.words[State.index];
+    const lid=State.listId || _findListForWord(cur);
+    if (lid) { const words=DB.wordsFor(lid); const gi=words.findIndex(w=>w.fr===cur.fr&&w.trans===cur.trans); if(gi>=0){SR.update(words[gi],q);DB.setWordsFor(lid,words);} }
+    State.index++;
+    Flashcard.renderCurrent();
+  },
+};
+
+/* ============================================================
+   QUIZ
+   ============================================================ */
+const Quiz = {
+  answered: false,
+  dir: 'fr2de',
+  init() { Quiz.answered=false; Quiz.renderCurrent(); },
+  renderCurrent() {
+    const w = State.words[State.index];
+    if (!w) { onComplete(); return; }
+    updateProgressBar('qz', State.index, State.words.length);
+    Quiz.answered = false;
+    Quiz.dir = State.index%2===0 ? 'fr2de' : 'de2fr';
+    document.getElementById('qz-dir-badge').textContent = Quiz.dir==='fr2de' ? 'FR→DE' : 'DE→FR';
+
+    const question = Quiz.dir==='fr2de' ? w.fr    : w.trans;
+    const correct  = Quiz.dir==='fr2de' ? w.trans : w.fr;
+    const subtext  = Quiz.dir==='fr2de' ? w.exFr  : w.exTrans;
+
+    // distractors from all words
+    const all = DB.allWords();
+    const pool = Quiz.dir==='fr2de'
+      ? all.filter(x=>x.trans!==correct).map(x=>x.trans)
+      : all.filter(x=>x.fr!==correct).map(x=>x.fr);
+    const distractors = shuffle(pool).slice(0,3);
+    const opts = shuffle([correct, ...distractors]);
+
+    document.getElementById('qz-q').textContent   = question;
+    document.getElementById('qz-sub').textContent = subtext ? `"${subtext}"` : '';
+    const el = document.getElementById('qz-opts');
+    el.innerHTML = opts.map(o => `
+      <div class="quiz-opt" role="listitem" tabindex="0"
+           onclick="Quiz.answer(this,'${esc(o)}','${esc(correct)}')"
+           onkeydown="if(event.key==='Enter'||event.key===' ')Quiz.answer(this,'${esc(o)}','${esc(correct)}')">
+        ${esc(o)}
+      </div>`).join('');
+    document.getElementById('qz-next-wrap').style.display='none';
+  },
+  answer(el, chosen, correct) {
+    if (Quiz.answered) return;
+    Quiz.answered = true;
+    document.querySelectorAll('.quiz-opt').forEach(o=>o.classList.add('disabled'));
+    const ok = chosen===correct;
+    el.classList.add(ok?'correct':'wrong');
+    if (!ok) document.querySelectorAll('.quiz-opt').forEach(o=>{ if(o.textContent.trim()===correct) o.classList.add('correct'); });
+    if (ok) { Gamification.addXP(10); State.xpEarned+=10; State.score++; }
+    else    el.classList.add('shake');
+    const cur=State.words[State.index];
+    const lid=State.listId||_findListForWord(cur);
+    if(lid){const words=DB.wordsFor(lid);const gi=words.findIndex(w=>w.fr===cur.fr&&w.trans===cur.trans);if(gi>=0){SR.update(words[gi],ok?4:2);DB.setWordsFor(lid,words);}}
+    document.getElementById('qz-next-wrap').style.display='block';
+  },
+  next() { State.index++; Quiz.renderCurrent(); },
+};
+
+/* ============================================================
+   TYPING
+   ============================================================ */
+const FR_ACCENTS = ['é','è','ê','ë','à','â','ù','û','ô','î','ï','ç','œ','æ'];
+const DE_ACCENTS = ['ä','ö','ü','Ä','Ö','Ü','ß'];
+function stripAccents(s) { return s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/ß/g,'ss'); }
+
+const Typing = {
+  hintUsed:false, hintLevel:0, dir:'fr2de',
+  init() { Typing.hintUsed=false; Typing.hintLevel=0; Typing.renderCurrent(); },
+  renderCurrent() {
+    const w = State.words[State.index];
+    if (!w) { onComplete(); return; }
+    updateProgressBar('ty', State.index, State.words.length);
+    Typing.hintUsed=false; Typing.hintLevel=0;
+    Typing.dir = State.index%2===0 ? 'fr2de' : 'de2fr';
+    document.getElementById('ty-dir-badge').textContent = Typing.dir==='fr2de' ? 'FR→DE' : 'DE→FR';
+
+    if (Typing.dir==='fr2de') {
+      document.getElementById('ty-q').textContent   = w.fr;
+      document.getElementById('ty-sub').textContent = w.exFr||'Type the German translation';
+    } else {
+      document.getElementById('ty-q').textContent   = w.trans;
+      document.getElementById('ty-sub').textContent = w.exTrans||'Type the French word';
+    }
+
+    // accent bar depends on target language
+    const bar    = document.getElementById('accent-bar');
+    const accents = Typing.dir==='fr2de' ? DE_ACCENTS : FR_ACCENTS;
+    bar.innerHTML = '<span style="font-size:.75rem;color:var(--text2);align-self:center">Accents:</span>';
+    accents.forEach(a => {
+      const b = document.createElement('button');
+      b.className='accent-btn'; b.textContent=a;
+      b.onclick=()=>{ const inp=document.getElementById('ty-inp'); const pos=inp.selectionStart; inp.value=inp.value.slice(0,pos)+a+inp.value.slice(pos); inp.selectionStart=inp.selectionEnd=pos+1; inp.focus(); };
+      bar.appendChild(b);
+    });
+
+    const inp = document.getElementById('ty-inp');
+    inp.value=''; inp.style.borderColor=''; inp.disabled=false;
+    document.getElementById('ty-feedback').textContent='';
+    document.getElementById('ty-hint-btn').style.display='inline-flex';
+    document.getElementById('ty-next-wrap').style.display='none';
+    setTimeout(()=>inp.focus(),50);
+  },
+  submit() {
+    const inp = document.getElementById('ty-inp');
+    const raw = inp.value.trim();
+    if (!raw) return;
+    const w       = State.words[State.index];
+    const correct = Typing.dir==='fr2de' ? w.trans : w.fr;
+    const stripped   = stripAccents(raw);
+    const strCorrect = stripAccents(correct);
+    const isCorrect  = stripped === strCorrect;
+    const exactMatch = raw.toLowerCase() === correct.toLowerCase();
+
+    const fb = document.getElementById('ty-feedback');
+    if (isCorrect) {
+      let xp = 10; if (Typing.hintUsed) xp=Math.max(0,xp-5);
+      const bonus = exactMatch&&!Typing.hintUsed ? 5 : 0;
+      Gamification.addXP(xp+bonus); State.xpEarned+=xp+bonus; State.score++;
+      fb.style.color='var(--success)';
+      fb.textContent = exactMatch ? '✅ Perfect!'+(bonus?' +5 accent bonus!':'') : `✅ Correct! (${correct})`;
+      inp.style.borderColor='var(--success)';
+    } else {
+      fb.style.color='var(--error)';
+      fb.textContent=`❌ Answer: ${correct}`;
+      inp.style.borderColor='var(--error)';
+      inp.classList.add('shake');
+      setTimeout(()=>inp.classList.remove('shake'),400);
+    }
+    const cur=State.words[State.index];
+    const lid=State.listId||_findListForWord(cur);
+    if(lid){const words=DB.wordsFor(lid);const gi=words.findIndex(x=>x.fr===cur.fr&&x.trans===cur.trans);if(gi>=0){SR.update(words[gi],isCorrect?4:2);DB.setWordsFor(lid,words);}}
+    document.getElementById('ty-hint-btn').style.display='none';
+    document.getElementById('ty-next-wrap').style.display='block';
+    inp.disabled=true;
+  },
+  hint() {
+    const w       = State.words[State.index];
+    const correct = Typing.dir==='fr2de' ? w.trans : w.fr;
+    Typing.hintUsed=true; Typing.hintLevel++;
+    const revealed = correct.slice(0, Typing.hintLevel+1);
+    const inp = document.getElementById('ty-inp');
+    inp.value = revealed;
+    document.getElementById('ty-feedback').style.color='var(--warning)';
+    document.getElementById('ty-feedback').textContent='Hint: '+revealed+'…';
+    if (revealed.length>=correct.length-1) document.getElementById('ty-hint-btn').style.display='none';
+    inp.focus();
+  },
+  next() { State.index++; Typing.renderCurrent(); },
+};
+
+/* ============================================================
+   MATCH
+   ============================================================ */
+const Match = {
+  roundWords:[], selectedFR:null, selectedTR:null,
+  matched:new Set(), timer:null, elapsed:0, totalWords:0,
+
+  init() { Match.matched=new Set(); Match.selectedFR=null; Match.selectedTR=null; Match.elapsed=0; Match.nextRound(); },
+  nextRound() {
+    clearInterval(Match.timer);
+    Match.matched=new Set(); Match.selectedFR=null; Match.selectedTR=null;
+    const remaining = State.words.slice(State.index);
+    if (!remaining.length) { onComplete(); return; }
+    const pool = remaining.slice(0,8);
+    Match.totalWords = pool.length;
+    const frWords = shuffle([...pool]);
+    const trWords = shuffle([...pool]);
+    document.getElementById('match-col-fr').innerHTML = frWords.map((w,i)=>
+      `<div class="match-card" id="mfr-${i}" data-fr="${esc(w.fr)}" data-tr="${esc(w.trans)}" onclick="Match.selectFR(this)" role="button">${esc(w.fr)}</div>`
+    ).join('');
+    document.getElementById('match-col-tr').innerHTML = trWords.map((w,i)=>
+      `<div class="match-card" id="mtr-${i}" data-tr="${esc(w.trans)}" data-fr="${esc(w.fr)}" onclick="Match.selectTR(this)" role="button">${esc(w.trans)}</div>`
+    ).join('');
+    document.getElementById('match-next-wrap').style.display='none';
+    Match.elapsed=0;
+    Match.timer=setInterval(()=>{ Match.elapsed++; document.getElementById('match-timer').textContent='⏱ '+Match.elapsed+'s'; },1000);
+  },
+  selectFR(el) {
+    if (el.classList.contains('matched')) return;
+    document.querySelectorAll('#match-col-fr .match-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected'); Match.selectedFR=el;
+    if (Match.selectedTR) Match.checkPair();
+  },
+  selectTR(el) {
+    if (el.classList.contains('matched')) return;
+    document.querySelectorAll('#match-col-tr .match-card').forEach(c=>c.classList.remove('selected'));
+    el.classList.add('selected'); Match.selectedTR=el;
+    if (Match.selectedFR) Match.checkPair();
+  },
+  checkPair() {
+    const fr=Match.selectedFR; const tr=Match.selectedTR;
+    if (!fr||!tr) return;
+    if (fr.dataset.tr===tr.dataset.tr) {
+      fr.classList.remove('selected'); fr.classList.add('matched');
+      tr.classList.remove('selected'); tr.classList.add('matched');
+      Gamification.addXP(10); State.xpEarned+=10; State.score++;
+      Match.matched.add(fr.dataset.fr);
+      const cur=State.words.find(w=>w.fr===fr.dataset.fr);
+      if(cur){const lid=State.listId||_findListForWord(cur);if(lid){const words=DB.wordsFor(lid);const gi=words.findIndex(w=>w.fr===cur.fr);if(gi>=0){SR.update(words[gi],4);DB.setWordsFor(lid,words);}}}
+      if (Match.matched.size===Match.totalWords) {
+        clearInterval(Match.timer);
+        State.index+=Match.totalWords;
+        document.getElementById('match-next-wrap').style.display='block';
+      }
+    } else {
+      fr.classList.add('wrong'); tr.classList.add('wrong');
+      setTimeout(()=>{ fr.classList.remove('wrong','selected'); tr.classList.remove('wrong','selected'); Match.selectedFR=null; Match.selectedTR=null; },600);
+      return;
+    }
+    Match.selectedFR=null; Match.selectedTR=null;
+  },
+};
+
+/* ============================================================
+   SETTINGS
+   ============================================================ */
+const Settings = {
+  init() {
+    const s=DB.settings();
+    document.getElementById('tog-dark').checked = !!s.darkMode;
+    document.getElementById('tog-nag').checked  = !!s.nagEnabled;
+    const h=String(s.nagHour||18).padStart(2,'0');
+    const m=String(s.nagMinute||0).padStart(2,'0');
+    document.getElementById('nag-time').value = h+':'+m;
+    Settings._populateVoices(s);
+  },
+  _populateVoices(s) {
+    const frSel=document.getElementById('voice-fr-sel');
+    const deSel=document.getElementById('voice-de-sel');
+    const frV=Speech.byLang('fr'); const deV=Speech.byLang('de');
+    frSel.innerHTML = frV.length ? frV.map(v=>`<option value="${esc(v.voiceURI)}" ${v.voiceURI===s.voiceURIfr?'selected':''}>${esc(v.name)} (${v.lang})</option>`).join('') : '<option value="">No French voices</option>';
+    deSel.innerHTML = deV.length ? deV.map(v=>`<option value="${esc(v.voiceURI)}" ${v.voiceURI===s.voiceURIde?'selected':''}>${esc(v.name)} (${v.lang})</option>`).join('') : '<option value="">No German voices</option>';
+  },
+  setDark(on) { document.documentElement.setAttribute('data-theme',on?'dark':'light'); const s=DB.settings();s.darkMode=on;DB.setSettings(s); },
+  setVoice(lang,uri) { const s=DB.settings(); if(lang==='fr')s.voiceURIfr=uri; else s.voiceURIde=uri; DB.setSettings(s); },
+  setNag(on)     { const s=DB.settings();s.nagEnabled=on;DB.setSettings(s); if(on)Notifier.schedule(); else Notifier.cancel(); },
+  setNagTime(val){ const [h,m]=val.split(':').map(Number); const s=DB.settings();s.nagHour=h;s.nagMinute=m;DB.setSettings(s); Notifier.schedule(); },
+  exportAll() {
+    const lists=DB.lists();
+    const data={ lists, words:{}, gamification:DB.gamification(), exported:new Date().toISOString() };
+    lists.forEach(l=>data.words[l.id]=DB.wordsFor(l.id));
+    const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+    const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='vocab-backup.json'; a.click();
+  },
+  importData(e) {
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=evt=>{
+      try {
+        const data=JSON.parse(evt.target.result);
+        if (!Array.isArray(data.lists)) { alert('Invalid backup file.'); return; }
+        if (!confirm(`Import ${data.lists.length} list(s)? Existing lists with the same ID will be overwritten.`)) return;
+        const existing=DB.lists();
+        data.lists.forEach(l=>{
+          if (!existing.find(x=>x.id===l.id)) existing.push(l);
+          else { const idx=existing.findIndex(x=>x.id===l.id); existing[idx]=l; }
+          if (data.words&&data.words[l.id]) DB.setWordsFor(l.id,data.words[l.id]);
+        });
+        DB.setLists(existing);
+        if (data.gamification) DB.setGamification(data.gamification);
+        ListManager.render(); Home.refresh(); alert('Import successful!');
+      } catch(err) { alert('Could not read file: '+err.message); }
+    };
+    reader.readAsText(file);
+    e.target.value='';
+  },
+  resetAll() {
+    if (!confirm('Delete ALL data? Cannot be undone!')) return;
+    if (!confirm('Really? Everything will be gone.')) return;
+    Object.keys(localStorage).filter(k=>k.startsWith('frapp_')).forEach(k=>localStorage.removeItem(k));
+    location.reload();
+  },
+};
+
+/* ============================================================
+   NOTIFIER
+   ============================================================ */
+const Notifier = {
+  _tid: null,
+  schedule() {
+    const s=DB.settings(); if(!s.nagEnabled) return;
+    Notifier.cancel();
+    const now=new Date(); const target=new Date(now);
+    target.setHours(s.nagHour||18,s.nagMinute||0,0,0);
+    if (target<=now) target.setDate(target.getDate()+1);
+    DB.set('notif_timer_id',target.getTime());
+    Notifier._tid=setTimeout(()=>Notifier.fire(), target-now);
+  },
+  cancel() { if(Notifier._tid){clearTimeout(Notifier._tid);Notifier._tid=null;} },
+  fire() {
+    if (Notification.permission==='granted') {
+      new Notification('🇫🇷↔🇩🇪 Vocab!',{body:'Time to practice! 🚀'});
+    } else { UI.xpToast('⏰ Time to practice!'); }
+    Notifier.schedule();
+  },
+  checkMissed() { const e=DB.get('notif_timer_id',null); if(e&&e<Date.now()) Notifier.fire(); },
+  requestPermission() { if('Notification'in window&&Notification.permission==='default') Notification.requestPermission(); },
+};
+
+/* ============================================================
+   HELPER: find which list a word belongs to (for SM-2 updates
+   when practising "all words")
+   ============================================================ */
+function _findListForWord(word) {
+  if (!word) return '';
+  for (const l of DB.lists()) {
+    const words = DB.wordsFor(l.id);
+    if (words.find(w=>w.fr===word.fr&&w.trans===word.trans)) return l.id;
+  }
+  return '';
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+window.addEventListener('DOMContentLoaded', () => {
+  Speech.init();
+  Home.refresh();
+  ListManager.render();
+  Settings.init();
+  Notifier.checkMissed();
+  const s=DB.settings(); if(s.nagEnabled) Notifier.schedule();
+  Notifier.requestPermission();
+  speechSynthesis.addEventListener('voiceschanged', () => {
+    Speech.voices = speechSynthesis.getVoices();
+    Settings._populateVoices(DB.settings());
+    // Warm-up after voices load so first tap is instant
+    const warm = new SpeechSynthesisUtterance(' ');
+    warm.volume = 0;
+    speechSynthesis.speak(warm);
+  });
+});
+</script>
+</body>
+</html>
