@@ -234,6 +234,13 @@ label { font-size:.82rem; font-weight:600; color:var(--text2); display:block; ma
   .mode-grid, .quiz-options, .match-grid { grid-template-columns:1fr; }
 }
 
+/* AI PARSE */
+.ai-parse-btn { background:var(--grad-violet); color:#fff; border:none; border-radius:var(--radius-sm); padding:9px 18px; cursor:pointer; font-weight:700; font-size:.88rem; display:inline-flex; align-items:center; gap:7px; margin-top:8px; transition:filter .15s; }
+.ai-parse-btn:hover { filter:brightness(1.1); }
+.ai-parse-btn:disabled { opacity:.55; cursor:not-allowed; }
+.ai-spinner { display:inline-block; width:13px; height:13px; border:2px solid rgba(255,255,255,.4); border-top-color:#fff; border-radius:50%; animation:ai-spin .7s linear infinite; }
+@keyframes ai-spin { to { transform:rotate(360deg); } }
+
 /* SVG ICONS */
 .ico { display:inline-block; width:1.2em; height:1.2em; vertical-align:middle; fill:currentColor; flex-shrink:0; }
 .ico-lg { width:1.6em; height:1.6em; }
@@ -446,6 +453,20 @@ label { font-size:.82rem; font-weight:600; color:var(--text2); display:block; ma
       </div>
     </div>
     <input type="file" id="photo-file" accept="image/*" style="display:none" onchange="VocabManager.onFileChange(event)">
+
+    <!-- AI Parse Results -->
+    <div id="ai-parse-wrap" style="display:none;margin-bottom:16px" class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <strong>✨ AI Extracted Vocabulary</strong>
+        <button class="btn-icon" onclick="document.getElementById('ai-parse-wrap').style.display='none'" aria-label="Close"><svg class="ico"><use href="#ico-close"/></svg></button>
+      </div>
+      <div id="ai-parse-preview" class="import-preview" style="max-height:260px"></div>
+      <div id="ai-parse-count" class="import-count" style="margin-top:6px"></div>
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <button class="btn btn-primary btn-sm" onclick="VocabManager.importAIParsed()">Add to List</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('ai-parse-wrap').style.display='none'">Dismiss</button>
+      </div>
+    </div>
 
     <!-- Bulk import -->
     <details style="margin-bottom:16px">
@@ -688,6 +709,18 @@ label { font-size:.82rem; font-weight:600; color:var(--text2); display:block; ma
     </div>
 
     <div class="settings-section">
+      <h3>AI Image Parser</h3>
+      <div class="settings-row" style="flex-direction:column;align-items:stretch">
+        <label for="api-key-inp">Claude API Key</label>
+        <div style="display:flex;gap:8px;margin-top:6px">
+          <input type="password" id="api-key-inp" placeholder="sk-ant-…" style="flex:1" oninput="Settings.setApiKey(this.value)">
+          <button class="btn btn-ghost btn-sm" id="api-key-eye" onclick="Settings.toggleApiKeyVis()">Show</button>
+        </div>
+        <div class="sub" style="margin-top:4px">Enables AI parsing of vocab sheet photos. Stored in your browser only.</div>
+      </div>
+    </div>
+
+    <div class="settings-section">
       <h3>Data</h3>
       <div class="settings-row">
         <div class="label">Export all data (JSON)</div>
@@ -760,7 +793,7 @@ const DB = {
   },
   gamification()    { return DB.get('gamification', {xp:0,level:1,streak:0,lastPracticeDate:''}); },
   setGamification(g){ DB.set('gamification', g); },
-  settings()        { return DB.get('settings', {darkMode:false,nagEnabled:false,nagHour:18,nagMinute:0,voiceURIfr:'',voiceURIde:'',lastMode:'flashcard',lastListId:''}); },
+  settings()        { return DB.get('settings', {darkMode:false,nagEnabled:false,nagHour:18,nagMinute:0,voiceURIfr:'',voiceURIde:'',lastMode:'flashcard',lastListId:'',claudeApiKey:''}); },
   setSettings(s)    { DB.set('settings', s); },
 };
 
@@ -1056,6 +1089,8 @@ const Home = {
    ============================================================ */
 let _vocabListId = '';
 const VocabManager = {
+  _photoFile: null,
+  _aiParsed: [],
   openForList(lid) {
     _vocabListId = lid;
     const l = DB.lists().find(x=>x.id===lid);
@@ -1145,9 +1180,120 @@ const VocabManager = {
     if (file) VocabManager._showPhoto(file);
   },
   _showPhoto(file) {
+    VocabManager._photoFile = file;
     const url  = URL.createObjectURL(file);
     const prev = document.getElementById('photo-preview');
-    prev.innerHTML = `<img src="${url}" alt="Vocab sheet"><p>Use as reference to enter words ↓</p>`;
+    prev.innerHTML = `<img src="${url}" alt="Vocab sheet"><p style="margin-top:6px;color:var(--text2);font-size:.82rem">Scroll down to enter words manually, or</p><button class="ai-parse-btn" id="ai-parse-btn" onclick="VocabManager.parseWithAI()"><span class="ai-spinner" id="ai-spinner" style="display:none"></span><span id="ai-btn-text">✨ Parse with AI</span></button>`;
+  },
+
+  async parseWithAI() {
+    const s = DB.settings();
+    if (!s.claudeApiKey) {
+      alert('Please add your Claude API key in Settings first.');
+      Router.go('settings');
+      return;
+    }
+    if (!VocabManager._photoFile) { alert('No photo selected.'); return; }
+
+    const spinner = document.getElementById('ai-spinner');
+    const btnText = document.getElementById('ai-btn-text');
+    const btn     = document.getElementById('ai-parse-btn');
+    if (spinner) spinner.style.display = 'inline-block';
+    if (btnText) btnText.textContent   = 'Parsing…';
+    if (btn)    btn.disabled           = true;
+
+    try {
+      const base64    = await VocabManager._fileToBase64(VocabManager._photoFile);
+      const mediaType = VocabManager._photoFile.type || 'image/jpeg';
+
+      const resp = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'x-api-key': s.claudeApiKey,
+          'anthropic-version': '2023-06-01',
+          'content-type': 'application/json',
+          'anthropic-dangerous-direct-browser-calls': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-6',
+          max_tokens: 4096,
+          messages: [{
+            role: 'user',
+            content: [
+              { type: 'image', source: { type: 'base64', media_type: mediaType, data: base64 } },
+              { type: 'text', text: `Extract all vocabulary from this French–German vocabulary sheet image.
+Return ONLY a valid JSON array, no markdown fences, no explanation:
+[{"fr":"French word or phrase","trans":"German translation","exFr":"French example sentence or empty string","exTrans":"German example sentence or empty string"}]
+
+Rules:
+- Each vocabulary entry (word, phrase, or abbreviation) and its German translation → one object.
+- If a full French sentence appears with its German translation and is NOT an example for a specific word, include it as its own entry (fr = French sentence, trans = German sentence, exFr = "", exTrans = "").
+- If a vocabulary word has an example sentence, put it in exFr / exTrans.
+- Omit phonetic transcriptions like [laRekReasjɔ̃] — keep only the actual words/sentences.
+- Use "" for missing fields.
+- Return ONLY the JSON array.` }
+            ]
+          }]
+        })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({ error: { message: resp.statusText } }));
+        throw new Error(err.error?.message || resp.statusText);
+      }
+
+      const data  = await resp.json();
+      const text  = data.content?.[0]?.text || '';
+      const match = text.match(/\[[\s\S]*\]/);
+      if (!match) throw new Error('No JSON array in response. Raw: ' + text.slice(0, 200));
+
+      const parsed = JSON.parse(match[0]);
+      if (!Array.isArray(parsed) || !parsed.length) throw new Error('No vocabulary extracted from this image.');
+
+      VocabManager._aiParsed = parsed
+        .filter(e => e.fr && e.trans)
+        .map(e => SR.newEntry((e.fr||'').trim(), (e.trans||'').trim(), (e.exFr||'').trim(), (e.exTrans||'').trim()));
+
+      if (!VocabManager._aiParsed.length) throw new Error('No valid entries found. Check the image quality.');
+
+      const wrap = document.getElementById('ai-parse-wrap');
+      const prev = document.getElementById('ai-parse-preview');
+      const cnt  = document.getElementById('ai-parse-count');
+      prev.textContent = VocabManager._aiParsed.map(e =>
+        `${e.fr} → ${e.trans}${e.exFr ? '\n  ex: ' + e.exFr + ' / ' + e.exTrans : ''}`
+      ).join('\n\n');
+      cnt.textContent = `✅ ${VocabManager._aiParsed.length} entr${VocabManager._aiParsed.length === 1 ? 'y' : 'ies'} extracted`;
+      wrap.style.display = 'block';
+      wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    } catch (err) {
+      alert('AI parsing failed: ' + err.message);
+    } finally {
+      if (spinner) spinner.style.display = 'none';
+      if (btnText) btnText.textContent   = '✨ Parse with AI';
+      if (btn)    btn.disabled           = false;
+    }
+  },
+
+  _fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload  = e => resolve(e.target.result.split(',')[1]);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  },
+
+  importAIParsed() {
+    if (!_vocabListId) { alert('Please open a list first.'); return; }
+    if (!VocabManager._aiParsed.length) { alert('Nothing to import.'); return; }
+    const existing = DB.wordsFor(_vocabListId);
+    DB.setWordsFor(_vocabListId, [...existing, ...VocabManager._aiParsed]);
+    const count = VocabManager._aiParsed.length;
+    VocabManager._aiParsed = [];
+    document.getElementById('ai-parse-wrap').style.display = 'none';
+    VocabManager.renderList();
+    UI.xpToast(`Added ${count} word${count === 1 ? '' : 's'}! 📚`);
   },
 };
 
@@ -1558,6 +1704,7 @@ const Settings = {
     const h=String(s.nagHour||18).padStart(2,'0');
     const m=String(s.nagMinute||0).padStart(2,'0');
     document.getElementById('nag-time').value = h+':'+m;
+    document.getElementById('api-key-inp').value = s.claudeApiKey || '';
     Settings._populateVoices(s);
   },
   _populateVoices(s) {
@@ -1571,6 +1718,13 @@ const Settings = {
   setVoice(lang,uri) { const s=DB.settings(); if(lang==='fr')s.voiceURIfr=uri; else s.voiceURIde=uri; DB.setSettings(s); },
   setNag(on)     { const s=DB.settings();s.nagEnabled=on;DB.setSettings(s); if(on)Notifier.schedule(); else Notifier.cancel(); },
   setNagTime(val){ const [h,m]=val.split(':').map(Number); const s=DB.settings();s.nagHour=h;s.nagMinute=m;DB.setSettings(s); Notifier.schedule(); },
+  setApiKey(val) { const s=DB.settings(); s.claudeApiKey=val.trim(); DB.setSettings(s); },
+  toggleApiKeyVis() {
+    const inp=document.getElementById('api-key-inp');
+    const btn=document.getElementById('api-key-eye');
+    if (inp.type==='password') { inp.type='text'; btn.textContent='Hide'; }
+    else { inp.type='password'; btn.textContent='Show'; }
+  },
   exportAll() {
     const lists=DB.lists();
     const data={ lists, words:{}, gamification:DB.gamification(), exported:new Date().toISOString() };
