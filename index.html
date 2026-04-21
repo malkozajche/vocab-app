@@ -1193,8 +1193,12 @@ const VocabManager = {
       return;
     }
     el.innerHTML = addBtn + words.map((w,i) => {
-      const frSafe = esc(w.fr).replace(/'/g,'&#39;');
-      const deSafe = esc(w.trans).replace(/'/g,'&#39;');
+      const frSafe   = esc(w.fr).replace(/'/g,'&#39;');
+      const deSafe   = esc(w.trans).replace(/'/g,'&#39;');
+      const exFrSafe = esc(w.exFr||'').replace(/'/g,'&#39;');
+      const exDeSafe = esc(w.exTrans||'').replace(/'/g,'&#39;');
+      const frSpeak  = w.exFr    ? frSafe + '. ' + exFrSafe : frSafe;
+      const deSpeak  = w.exTrans ? deSafe + '. ' + exDeSafe : deSafe;
       return `
       <div class="word-item">
         <div class="word-item-text">
@@ -1204,8 +1208,8 @@ const VocabManager = {
         </div>
         <div class="mastery-stars" title="${w.mastery||0}/5">${UI.masteryStars(w.mastery||0)}</div>
         <div class="word-actions">
-          <button class="btn-icon" onclick="Speech.speak('${frSafe}','fr')" aria-label="Speak French" title="Speak French"><svg class="ico"><use href="#ico-speak"/></svg></button>
-          <button class="btn-icon" onclick="Speech.speak('${deSafe}','de')" aria-label="Speak German" title="Speak German" style="font-size:.65rem;font-weight:700;color:var(--text2);padding:5px 7px;border-radius:6px;background:var(--border);border:none;cursor:pointer;line-height:1">DE</button>
+          <button class="btn-icon" onclick="Speech.speak('${frSpeak}','fr')" aria-label="Speak French" title="Speak French"><svg class="ico"><use href="#ico-speak"/></svg></button>
+          <button class="btn-icon" onclick="Speech.speak('${deSpeak}','de')" aria-label="Speak German" title="Speak German" style="font-size:.65rem;font-weight:700;color:var(--text2);padding:5px 7px;border-radius:6px;background:var(--border);border:none;cursor:pointer;line-height:1">DE</button>
           <button class="btn-icon" onclick="VocabManager.edit(${i})"  aria-label="Edit"><svg class="ico"><use href="#ico-edit"/></svg></button>
           <button class="btn-icon danger" onclick="VocabManager.del(${i})" aria-label="Delete"><svg class="ico"><use href="#ico-trash"/></svg></button>
         </div>
@@ -1367,14 +1371,16 @@ const Flashcard = {
   speakFront() {
     const w = State.words[State.index]; if (!w) return;
     const lang = Flashcard.dir==='fr2de' ? 'fr' : 'de';
-    const text = Flashcard.dir==='fr2de' ? w.fr : w.trans;
-    Speech.speak(text, lang);
+    const word = Flashcard.dir==='fr2de' ? w.fr    : w.trans;
+    const ex   = Flashcard.dir==='fr2de' ? w.exFr  : w.exTrans;
+    Speech.speak(ex ? word + '. ' + ex : word, lang);
   },
   speakBack() {
     const w = State.words[State.index]; if (!w) return;
     const lang = Flashcard.dir==='fr2de' ? 'de' : 'fr';
-    const text = Flashcard.dir==='fr2de' ? w.trans : w.fr;
-    Speech.speak(text, lang);
+    const word = Flashcard.dir==='fr2de' ? w.trans  : w.fr;
+    const ex   = Flashcard.dir==='fr2de' ? w.exTrans : w.exFr;
+    Speech.speak(ex ? word + '. ' + ex : word, lang);
   },
   renderCurrent() {
     const w = State.words[State.index];
