@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Импортиране…</title>
+<style>
+  body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #F7F3EF; }
+  .box { text-align: center; padding: 32px; }
+  .emoji { font-size: 3rem; }
+  p { color: #6B6560; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="emoji">⏳</div>
+  <p>Импортиране на списък <strong>27.04.2026</strong>…</p>
+</div>
+<script>
+(function(){
+  var lists = JSON.parse(localStorage.getItem('frapp_lists')||'[]');
+  if(lists.find(function(l){return l.name==='27.04.2026';})){
+    document.querySelector('.emoji').textContent='✅';
+    document.querySelector('p').textContent='Списъкът вече съществува! Пренасочване…';
+    setTimeout(function(){location.href='index.html';},1200);
+    return;
+  }
+  var id = Date.now().toString(36);
+  lists.push({id:id, name:'27.04.2026', createdAt:Date.now()});
+  localStorage.setItem('frapp_lists', JSON.stringify(lists));
+  var now = Date.now();
+  var words = [
+    ["aujourd'hui","heute","",""],
+    ["bientôt","bald","",""],
+    ["déjà","schon","",""],
+    ["maintenant","jetzt","",""],
+    ["(trop) tard","(zu) spät","",""],
+    ["plus tard","später","",""],
+    ["avant le collège","vor der Schule","",""],
+    ["après le collège","nach der Schule","",""],
+    ["d'abord","zuerst","",""],
+    ["puis","dann","",""],
+    ["dans cinq minutes","in fünf Minuten","",""],
+    ["toujours","immer","",""],
+    ["parfois","manchmal","",""],
+    ["tout à coup","plötzlich","",""],
+    ["un rendez-vous","eine Verabredung","Rendez-vous à quelle heure?","Um wie viel Uhr treffen wir uns?"],
+    ["bonne idée","gute Idee","Oui, c'est une bonne idée!","Ja, das ist eine gute Idee."],
+    ["le temps","die Zeit","",""],
+    ["avoir le temps","Zeit haben","Je n'ai pas le temps.","Ich habe keine Zeit."],
+    ["c'est intéressant","das ist interessant","",""],
+    ["Bof!","Na ja.; Ach.","",""],
+    ["enfin","endlich; schließlich","La mère de Lola quitte enfin le concert.","Lolas Mutter verlässt endlich das Konzert."],
+    ["faire","etw. tun; etw. machen","Qu'est-ce qu'elles font?","Was machen sie?"],
+    ["un dessin","eine Zeichnung","Elles font des dessins super!","Sie machen super Zeichnungen!"],
+    ["on ne peut pas","man kann nicht","On peut faire du graff dans la cour? – Non, on ne peut pas.","Können wir im Hof Graffitis sprühen? – Nein, das können wir nicht."],
+    ["c'est interdit","das ist verboten","",""],
+    ["pas mal","ganz gut; nicht schlecht","",""],
+    ["un truc","ein Ding","Vous faites des trucs comme ça, au club?","Macht ihr in der AG auch so etwas?"],
+    ["travailler sur qc","arbeiten an etw.","Oui, nous aussi, on travaille sur le rythme.","Ja, auch wir arbeiten am Rhythmus."],
+    ["un rythme","ein Rhythmus","Oui, nous aussi, on travaille sur le rythme.","Ja, auch wir arbeiten am Rhythmus."],
+    ["quand","wenn; als","Quand je regarde ça, …","Wenn ich mir das ansehe, …"],
+    ["avoir envie (de faire qc)","Lust haben (etw. zu tun)","… j'ai envie de faire du théâtre aussi.","… bekomme ich Lust, auch Theater zu spielen."],
+    ["un carnet","ein Notizbuch","",""],
+    ["Qu'est-ce qu'on fait?","Was machen wir?","",""],
+    ["une adresse","eine Adresse","",""],
+    ["un numéro de téléphone","eine Telefonnummer","",""],
+    ["un style","ein Stil","J'adore son style de dessin.","Ich mag ihren Zeichenstil."],
+    ["vite","schnell","Vite! On commence.","Schnell! Wir fangen an."]
+  ].map(function(w){
+    return {fr:w[0],trans:w[1],exFr:w[2],exTrans:w[3],
+            repetitions:0,interval:1,easeFactor:2.5,nextReview:now,mastery:0};
+  });
+  localStorage.setItem('frapp_words_'+id, JSON.stringify(words));
+  document.querySelector('.emoji').textContent='✅';
+  document.querySelector('p').innerHTML='<strong>37 думи импортирани!</strong><br>Пренасочване към апа…';
+  setTimeout(function(){location.href='index.html';},1500);
+})();
+</script>
+</body>
+</html>
