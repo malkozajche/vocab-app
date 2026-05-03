@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Импортиране…</title>
+<style>
+  body { font-family: system-ui, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #F7F3EF; }
+  .box { text-align: center; padding: 32px; }
+  .emoji { font-size: 3rem; }
+  p { color: #6B6560; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="box">
+  <div class="emoji">⏳</div>
+  <p>Импортиране на списък <strong>3.05.2026</strong>…</p>
+</div>
+<script>
+(function(){
+  var lists = JSON.parse(localStorage.getItem('frapp_lists')||'[]');
+  if(lists.find(function(l){return l.name==='3.05.2026';})){
+    document.querySelector('.emoji').textContent='✅';
+    document.querySelector('p').textContent='Списъкът вече съществува! Пренасочване…';
+    setTimeout(function(){location.href='index.html';},1200);
+    return;
+  }
+  var id = Date.now().toString(36);
+  lists.push({id:id, name:'3.05.2026', createdAt:Date.now()});
+  localStorage.setItem('frapp_lists', JSON.stringify(lists));
+  var now = Date.now();
+  var words = [
+    ["un sondage","eine Umfrage","",""],
+    ["un ordinateur","ein Computer","",""],
+    ["faire qc","etw. tun; etw. machen","",""],
+    ["faire un tour","eine Runde drehen","",""],
+    ["faire ses devoirs","seine Hausaufgaben machen","",""],
+    ["faire du théâtre","Theater spielen","",""],
+    ["faire de la danse","tanzen","",""],
+    ["faire de l'escalade","klettern","",""],
+    ["une histoire","eine Geschichte","",""],
+    ["une semaine","eine Woche","Une semaine a sept jours.","Eine Woche hat sieben Tage."],
+    ["lundi","Montag","",""],
+    ["mardi","Dienstag","",""],
+    ["mercredi","Mittwoch","Aujourd'hui, c'est mercredi. Demain, c'est jeudi.","Heute ist Mittwoch. Morgen ist Donnerstag."],
+    ["jeudi","Donnerstag","",""],
+    ["vendredi","Freitag","",""],
+    ["samedi","Samstag","Bientôt, c'est le week-end.","Bald ist Wochenende."],
+    ["dimanche","Sonntag","",""],
+    ["anglais (m.)","Englisch","",""],
+    ["allemand (m.)","Deutsch","",""],
+    ["français (m.)","Französisch","",""],
+    ["mathématiques (f.pl.)","Mathematik","",""],
+    ["E.P.S. (f.)","Sport","",""],
+    ["S.V.T. (f.pl.)","Biologie","",""],
+    ["histoire-géo (f.)","Geschichte und Erdkunde","",""],
+    ["éducation musicale (f.)","Musik","",""],
+    ["chimie (f.)","Chemie","",""],
+    ["physique (f.)","Physik","",""],
+    ["technologie (f.)","Technik","",""],
+    ["arts plastiques (m.pl.)","Kunst","",""],
+    ["vie de classe (f.)","Klassenleiterst.; Leben der Klasse","",""],
+    ["permanence (f.)","beaufsichtigte Freitstunde","",""],
+    ["une journée","ein Tag; ein Tagesablauf","une journée de rêve","ein traumhaft schöner Tag"],
+    ["un rêve","ein Traum","une journée de rêve","ein traumhaft schöner Tag"],
+    ["un cauchemar","ein Albtraum","une journée de cauchemar","ein Tag wie ein Alptraum"],
+    ["organiser un week-end","ein Wochenende planen","",""],
+    ["On va où?","Wo gehen wir hin?","",""],
+    ["Tu as envie d'aller à … ?","Hast du Lust, zu … zu gehen?","",""],
+    ["On peut …","Wir können …","",""],
+    ["retrouver nos copains/copines","unsere Freunde/Freundinnen treffen","",""],
+    ["aller en ville","in die Stadt gehen","",""],
+    ["aller au cinéma","ins Kino gehen","",""],
+    ["à la piscine","ins Schwimmbad","",""],
+    ["à la maison des jeunes","ins Jugendhaus","",""],
+    ["à la médiathèque","in die Mediathek","",""],
+    ["au terrain de basket","zum Basketballplatz","",""],
+    ["à un concert","zu einem Konzert","",""],
+    ["à la fête de …","zum Fest / zur Party von …","",""],
+    ["faire du foot","Fußball spielen","",""],
+    ["faire des jeux vidéo","Computerspiele spielen","",""],
+    ["faire de la musique ensemble","zusammen Musik machen","",""],
+    ["faire du shopping","shoppen gehen","",""],
+    ["participer à la manifestation contre …","an der Demonstration gegen … teilnehmen","",""]
+  ].map(function(w){
+    return {fr:w[0],trans:w[1],exFr:w[2],exTrans:w[3],
+            repetitions:0,interval:1,easeFactor:2.5,nextReview:now,mastery:0};
+  });
+  localStorage.setItem('frapp_words_'+id, JSON.stringify(words));
+  document.querySelector('.emoji').textContent='✅';
+  document.querySelector('p').innerHTML='<strong>52 думи импортирани!</strong><br>Пренасочване към апа…';
+  setTimeout(function(){location.href='index.html';},1500);
+})();
+</script>
+</body>
+</html>
